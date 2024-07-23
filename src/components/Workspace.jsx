@@ -2,13 +2,14 @@ import React from "react";
 
 export default function Workspace(props){
 
-    const [currTask, setCurrTask] = React.useState("");
 
-    function handleChange(event){
-        setCurrTask(event.target.value)
-    }
+    // function handleChange(event){
+    //     setCurrTask(event.target.value)
+    // }
 
     const taskElements = props.tasks.map(e => <div>{e}</div>)
+
+    console.log(props)
 
     return (
         <div className="workspace">
@@ -25,8 +26,10 @@ export default function Workspace(props){
                     name="task" 
                     type="text" 
                     autoFocus 
-                    onChange={handleChange}
-                    onKeyDown={(e) => (props.enter(e, currTask))}
+                    onChange={props.handleChange}
+                    onBlur={props.onBlur}
+                    value={props.currTask}
+                    onKeyDown={(e) => (props.enter(e, props.currTask))}
                 />
             }
         </div>
