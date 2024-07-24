@@ -8,7 +8,7 @@ export default function Task(props) {
 	}
 
 	function handleChange(event) {
-		props.edit(event.target.value, props.id);
+		props.editTask(event.target.value, props.id);
 	}
 
 	function handleKey(event) {
@@ -18,11 +18,11 @@ export default function Task(props) {
 		}
 
 		if (event.key === "ArrowUp") {
-			props.move(-1);
+			props.stepFocus(-1);
 		}
 
 		if (event.key === "ArrowDown") {
-			props.move(1);
+			props.stepFocus(1);
 		}
 	}
 
@@ -33,9 +33,15 @@ export default function Task(props) {
 	};
 
 	return (
-		<div className="task" style={styles.taskContainer}>
-			<input className="task--checkbox" type="checkbox" />
+		<div className="task" style={styles.taskContainer} shouldfocus="">
 			<input
+				className="task--checkbox"
+				type="checkbox"
+				shouldfocus=""
+				onClick={(event) => props.handleClick(event, props.id)}
+			/>
+			<input
+				shouldfocus=""
 				autoFocus={props.focus}
 				className="task--text"
 				type="text"

@@ -68,6 +68,7 @@ input:focus{
     padding-block: 5px;
     display: flex;
     align-items: center;
+    width: 80%;
 }
 
 .task--checkbox{

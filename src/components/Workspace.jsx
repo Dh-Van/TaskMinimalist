@@ -10,12 +10,11 @@ export default function Workspace(props) {
 			key={idx}
 			id={idx}
 			text={e}
-			edit={props.taskEdit}
+			editTask={props.editTask}
 			focus={currentFocus - 1 === idx}
 			submit={handleSubmit}
-			move={move}
+			stepFocus={stepFocus}
 			handleClick={taskClick}
-			unfocus={unfocus}
 		/>
 	));
 
@@ -23,7 +22,7 @@ export default function Workspace(props) {
 		if (currentFocus !== props.tasks.length) {
 			return;
 		}
-		props.add();
+		props.addEmptyTask();
 		setCurrentFocus((prevState) => prevState + 1);
 		setShowAdd(false);
 	}
@@ -34,20 +33,23 @@ export default function Workspace(props) {
 
 	function handleClick() {
 		setShowAdd(false);
-		props.add();
-		setCurrentFocus((prevState) => prevState - 1);
+		props.addEmptyTask();
+		setCurrentFocus(props.tasks.length + 1);
 	}
 
-	function move(direction) {
+	function stepFocus(step) {
 		setCurrentFocus((prevState) =>
-			prevState + direction > 0 &&
-			prevState + direction <= props.tasks.length
-				? prevState + direction
+			prevState + step > 0 && prevState + step <= props.tasks.length
+				? prevState + step
 				: prevState
 		);
 	}
 
-	function unfocus() {
+	if (
+		currentFocus <= props.tasks.length &&
+		props.clickedElement &&
+		!props.clickedElement.attributes.shouldfocus
+	) {
 		setShowAdd(true);
 		setCurrentFocus((prevState) => prevState + 1);
 	}
@@ -57,11 +59,15 @@ export default function Workspace(props) {
 			<h1 className="workspace--inbox">Inbox</h1>
 			{taskElements}
 			{showAdd && (
-				<button className="workspace--add-button" onClick={handleClick}>
+				<button
+					className="workspace--add-button"
+					onClick={handleClick}
+					id={1}
+					shouldfocus=""
+				>
 					+ Add Task
 				</button>
 			)}
-			<div className="workspace--blank" onClick={unfocus}></div>
 		</div>
 	);
 }

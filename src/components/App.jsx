@@ -5,12 +5,13 @@ import Workspace from "./Workspace";
 export default function App() {
 	const sampleData = ["test", "task 1", "task 2", "test 2"];
 	const [tasks, setTasks] = React.useState(sampleData);
+	const [clickedElement, setClickedElement] = React.useState(null);
 
-	function enter(val) {
+	function handleSubmit(val) {
 		setTasks((prevState) => [...prevState, val]);
 	}
 
-	function taskEdit(val, idx) {
+	function editTask(val, idx) {
 		console.log(idx, tasks.length);
 		if (idx >= tasks.length) {
 			setTasks((prevState) => [...prevState, val]);
@@ -18,20 +19,21 @@ export default function App() {
 		setTasks((prevState) => prevState.with(idx, val));
 	}
 
-	function add() {
+	function addEmptyTask() {
 		setTasks((prevState) => [...prevState, ""]);
 	}
 
-	console.log(tasks);
+	// console.log(tasks);
 
 	return (
-		<div className="app">
+		<div className="app" onClick={(e) => setClickedElement(e.target)}>
 			<Sidebar />
 			<Workspace
 				tasks={tasks}
-				enter={enter}
-				taskEdit={taskEdit}
-				add={add}
+				enter={handleSubmit}
+				editTask={editTask}
+				addEmptyTask={addEmptyTask}
+				clickedElement={clickedElement}
 			/>
 		</div>
 	);
