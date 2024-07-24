@@ -28,6 +28,8 @@ html, head, body, #root{
 .workspace{
     padding: 20px;
     width: 100%;
+    display: flex;
+    flex-direction: column;
 }
 
 .workspace--inbox{
@@ -40,6 +42,7 @@ html, head, body, #root{
     text-align: left;
     border: 0px;
     font-size: 18px;
+    margin-block: 10px;
 }
 
 input {
@@ -54,6 +57,34 @@ input {
 
 input:focus{
     outline: none;
+}
+
+/* .task:hover{
+    background-color: red;
+} */
+
+.task{
+    border: 0px;
+    padding-block: 5px;
+    display: flex;
+    align-items: center;
+}
+
+.task--checkbox{
+    width: 40px;
+}
+
+.task--text{
+    border: 0px;
+}
+
+.task:focus{
+    background-color: #282828;
+}
+
+.workspace--blank{
+    width: auto;
+    flex-grow: 1;
 }
 
 /* .workspace--add-button:hover{

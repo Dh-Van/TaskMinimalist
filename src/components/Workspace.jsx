@@ -1,37 +1,67 @@
 import React from "react";
+import Task from "./Task";
 
-export default function Workspace(props){
+export default function Workspace(props) {
+	const [showAdd, setShowAdd] = React.useState(true);
+	const [currentFocus, setCurrentFocus] = React.useState(props.tasks.length);
 
+	const taskElements = props.tasks.map((e, idx) => (
+		<Task
+			key={idx}
+			id={idx}
+			text={e}
+			edit={props.taskEdit}
+			focus={currentFocus - 1 === idx}
+			submit={handleSubmit}
+			move={move}
+			handleClick={taskClick}
+			unfocus={unfocus}
+		/>
+	));
 
-    // function handleChange(event){
-    //     setCurrTask(event.target.value)
-    // }
+	function handleSubmit() {
+		if (currentFocus !== props.tasks.length) {
+			return;
+		}
+		props.add();
+		setCurrentFocus((prevState) => prevState + 1);
+		setShowAdd(false);
+	}
 
-    const taskElements = props.tasks.map(e => <div>{e}</div>)
+	function taskClick(event, id) {
+		setCurrentFocus(id + 1);
+	}
 
-    console.log(props)
+	function handleClick() {
+		setShowAdd(false);
+		props.add();
+		setCurrentFocus((prevState) => prevState - 1);
+	}
 
-    return (
-        <div className="workspace">
-            <h1 className="workspace--inbox">Inbox</h1>
-            {taskElements}
-            {props.add && <button 
-                className="workspace--add-button" 
-                onClick={props.handleClick}>
-                + Add Task
-            </button>}
-            {
-                !props.add &&
-                <input 
-                    name="task" 
-                    type="text" 
-                    autoFocus 
-                    onChange={props.handleChange}
-                    onBlur={props.onBlur}
-                    value={props.currTask}
-                    onKeyDown={(e) => (props.enter(e, props.currTask))}
-                />
-            }
-        </div>
-    )
+	function move(direction) {
+		setCurrentFocus((prevState) =>
+			prevState + direction > 0 &&
+			prevState + direction <= props.tasks.length
+				? prevState + direction
+				: prevState
+		);
+	}
+
+	function unfocus() {
+		setShowAdd(true);
+		setCurrentFocus((prevState) => prevState + 1);
+	}
+
+	return (
+		<div className="workspace">
+			<h1 className="workspace--inbox">Inbox</h1>
+			{taskElements}
+			{showAdd && (
+				<button className="workspace--add-button" onClick={handleClick}>
+					+ Add Task
+				</button>
+			)}
+			<div className="workspace--blank" onClick={unfocus}></div>
+		</div>
+	);
 }

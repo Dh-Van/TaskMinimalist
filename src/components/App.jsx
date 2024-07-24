@@ -2,39 +2,37 @@ import React from "react";
 import Sidebar from "./Sidebar";
 import Workspace from "./Workspace";
 
-export default function App(){
+export default function App() {
+	const sampleData = ["test", "task 1", "task 2", "test 2"];
+	const [tasks, setTasks] = React.useState(sampleData);
 
-    const [add, setAdd] = React.useState(true)
-    const [tasks, setTasks] = React.useState([])
-    const [currTask, setCurrTask] = React.useState("");
+	function enter(val) {
+		setTasks((prevState) => [...prevState, val]);
+	}
 
-    function handleClick(){
-        setAdd(false)
-    }
+	function taskEdit(val, idx) {
+		console.log(idx, tasks.length);
+		if (idx >= tasks.length) {
+			setTasks((prevState) => [...prevState, val]);
+		}
+		setTasks((prevState) => prevState.with(idx, val));
+	}
 
-    function handleChange(event){
-        setCurrTask(event.target.value)
-    }
+	function add() {
+		setTasks((prevState) => [...prevState, ""]);
+	}
 
-    function enter(e, val){
-        if(e.key !== "Enter"){return}
+	console.log(tasks);
 
-        // setAdd(true)
-        setCurrTask("")
-        setTasks(prevState => ([...prevState, val]))
-    }
-
-    function onBlur(){
-        setAdd(true)
-        // setCurrTask("")
-        // setTasks(prevState => ([...prevState, val]))
-
-    }
-
-    return (
-        <div className="app">
-            <Sidebar />
-            <Workspace tasks={tasks} add={add} handleChange={handleChange} handleClick={handleClick} enter={enter} currTask={currTask} onBlur={onBlur}/>
-        </div>
-    )
+	return (
+		<div className="app">
+			<Sidebar />
+			<Workspace
+				tasks={tasks}
+				enter={enter}
+				taskEdit={taskEdit}
+				add={add}
+			/>
+		</div>
+	);
 }
