@@ -118,6 +118,9 @@ html, head, body, #root {
     background-color: transparent;
     color: var(--dark-top);
 
+    width: 100%;
+    height: 100%;
+
     margin: 10px 20px;
     border: 0px;
     outline: none;
