@@ -8,20 +8,14 @@ export default function App() {
 
 	function setTask(idx, task) {
 		if (idx == -1) {
-			console.log("in edge case");
 			setTasks((prevTasks) => [...prevTasks, task]);
-			return;
+		} else {
+			setTasks((prevTasks) => [
+				...prevTasks.slice(0, idx),
+				task,
+				...prevTasks.slice(idx + 1),
+			]);
 		}
-
-		setTasks((prevTasks) => [
-			...prevTasks.slice(0, idx),
-			task,
-			...prevTasks.slice(idx + 1),
-		]);
-	}
-
-	function addTask() {
-		setTasks((prevTasks) => [...prevTasks, ""]);
 	}
 
 	return (
