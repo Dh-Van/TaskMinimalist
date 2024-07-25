@@ -1,9 +1,10 @@
 import React from "react";
 
-export default function Sidebar() {
+export default function Sidebar(props) {
 	return (
 		<div className="sidebar">
-			<h1>Sidebar</h1>
+			<h1>{props.name}</h1>
+			<h2>Inbox</h2>
 		</div>
 	);
 }
