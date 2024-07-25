@@ -21,10 +21,6 @@ export default function Workspace(props) {
 		}
 	}
 
-	function stepFocus(step) {
-		setFocus((prevFocus) => prevFocus + step);
-	}
-
 	function insertTask() {
 		setAddingTask(true);
 		props.setTask(-1, "");
@@ -67,8 +63,12 @@ export default function Workspace(props) {
 		}
 	}
 
+	function idle() {
+		setAddingTask(false);
+	}
+
 	return (
-		<div className="workspace" onClick={() => setAddingTask(false)}>
+		<div className="workspace" onClick={idle}>
 			<h1 className="workspace--title">Inbox</h1>
 			{taskElements}
 			<InsertButton show={!addingTask} handleClick={insertTask} />

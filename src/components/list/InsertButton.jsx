@@ -1,5 +1,11 @@
 import React from "react";
 
 export default function InsertButton(props) {
-	return props.show && <button onClick={props.handleClick}>Add Task</button>;
+	return (
+		props.show && (
+			<button className="insert-button" onClick={props.handleClick}>
+				+ Add Task
+			</button>
+		)
+	);
 }

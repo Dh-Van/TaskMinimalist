@@ -7,7 +7,9 @@ export default function App() {
 	const [tasks, setTasks] = React.useState(sampleTasks);
 
 	function setTask(idx, task) {
-		if (idx == -1) {
+		if (idx == -2) {
+			setTasks((prevTasks) => prevTasks.slice(0, -1));
+		} else if (idx == -1) {
 			setTasks((prevTasks) => [...prevTasks, task]);
 		} else {
 			setTasks((prevTasks) => [
