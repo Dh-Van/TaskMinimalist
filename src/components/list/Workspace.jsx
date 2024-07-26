@@ -73,7 +73,6 @@ export default function Workspace(props) {
 	}
 
 	function addTask(idx) {
-		// console.log(idx);
 		props.insertTask(idx);
 		setFocus(idx + 1);
 	}
@@ -87,6 +86,14 @@ export default function Workspace(props) {
 		});
 	}
 
+	function focusTask(idx) {
+		if (idx == -1) {
+			idx = props.tasks.length - 1;
+		}
+
+		setFocus(idx);
+	}
+
 	function stepFocus(step) {
 		setFocus((prevFocus) => {
 			const newFocus = prevFocus + step;
@@ -98,7 +105,9 @@ export default function Workspace(props) {
 		<div className="workspace">
 			<h1 className="workspace--title">Inbox</h1>
 			{taskElements}
-			{taskElements.length == 0 && <InsertButton handleClick={addTask} />}
+			{taskElements.length == 0 && (
+				<InsertButton handleClick={() => addTask(-1)} />
+			)}
 		</div>
 	);
 }

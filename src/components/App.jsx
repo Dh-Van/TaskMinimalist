@@ -22,8 +22,6 @@ export default function App() {
 	}
 
 	function insertTask(idx) {
-		// console.log(tasks.slice(0, idx + 1));
-		// console.log(tasks.slice(idx + 1));
 		setTasks((prevTasks) => [
 			...prevTasks.slice(0, idx + 1),
 			"",

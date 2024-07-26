@@ -15,6 +15,8 @@ export function getKeyBindingsConfig() {
 		{ Key: "ArrowUp", Action: "stepFocus(-1)" },
 		{ Key: "ArrowDown", Action: "stepFocus(1)" },
 		{ Key: "d", META: true, Action: "deleteTask" },
+		{ Key: "ArrowUp", META: true, Action: "focusTask(0)" },
+		{ Key: "ArrowDown", META: true, Action: "focusTask(-1)" },
 	];
 
 	return keyBindings.reduce((acc, binding) => {
