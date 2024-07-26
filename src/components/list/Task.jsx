@@ -23,7 +23,7 @@ export default function Task(props) {
 
 	return (
 		<div className="task" onClick={props.handleClick}>
-			<Checkbox sx={checkboxStyles} />
+			<Checkbox sx={checkboxStyles} checked={props.checked} />
 			<input
 				id={`task-${props.id}`}
 				ref={props.addRef}

@@ -4,10 +4,10 @@ import Workspace from "./list/Workspace";
 
 export default function App() {
 	const sampleTasks = [
-		{ text: "Thing 1", priority: 0 },
-		{ text: "Thing 2", priority: 0 },
-		{ text: "Thing 3", priority: 0 },
-		{ text: "Thing 4", priority: 0 },
+		{ text: "Thing 1", priority: 0, checked: false },
+		{ text: "Thing 2", priority: 0, checked: false },
+		{ text: "Thing 3", priority: 0, checked: false },
+		{ text: "Thing 4", priority: 0, checked: false },
 	];
 
 	const [tasks, setTasks] = React.useState(sampleTasks);

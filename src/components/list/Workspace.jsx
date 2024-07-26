@@ -19,7 +19,6 @@ export default function Workspace(props) {
 
 	function getTaskElements() {
 		taskRefs.current = [];
-		// console.log(props.tasks[0]);
 		return props.tasks.map((task, idx) => (
 			<Task
 				key={idx}
@@ -27,6 +26,7 @@ export default function Workspace(props) {
 				addRef={addTaskRef}
 				text={task.text}
 				priority={task.priority}
+				checked={task.checked}
 				handleChange={(event) => taskInput(idx, event)}
 				handleKey={(event) => taskKey(event, idx)}
 				handleClick={(event) => taskClick(idx, event)}
@@ -46,7 +46,11 @@ export default function Workspace(props) {
 	}
 
 	function setTask(idx, task) {
-		props.setTask(idx, { text: task.text, priority: task.priority });
+		props.setTask(idx, {
+			text: task.text,
+			priority: task.priority,
+			checked: task.checked,
+		});
 	}
 
 	function taskClick(idx, event) {
@@ -103,6 +107,10 @@ export default function Workspace(props) {
 		setFocus(direction);
 	}
 
+	function check(idx) {
+		setTask(idx, { ...props.tasks[idx], checked: true });
+	}
+
 	function stepFocus(idx, step) {
 		setFocus((prevFocus) => {
 			const newFocus = prevFocus + step;
@@ -111,7 +119,7 @@ export default function Workspace(props) {
 	}
 
 	function setPriority(idx, priority) {
-		setTask(idx, { text: props.tasks[idx].text, priority: priority });
+		setTask(idx, { ...props.tasks[idx], priority: priority });
 	}
 
 	return (

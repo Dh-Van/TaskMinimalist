@@ -15,6 +15,7 @@ export function getKeyBindingsConfig() {
 		{ Key: "d", META: true, Action: "deleteTask" },
 		{ Key: "ArrowUp", META: true, Action: "focusTask(0)" },
 		{ Key: "ArrowDown", META: true, Action: "focusTask(-1)" },
+		{ Key: "Enter", META: true, Action: "check()" },
 		{ Key: "0", META: true, Action: "setPriority(0)" },
 		{ Key: "1", META: true, Action: "setPriority(1)" },
 		{ Key: "2", META: true, Action: "setPriority(2)" },
