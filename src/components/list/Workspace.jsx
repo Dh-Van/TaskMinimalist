@@ -1,11 +1,16 @@
 import React from "react";
 import Task from "./Task";
 import InsertButton from "./InsertButton";
+import {
+	getKeyBindingsConfig,
+	generateKeyCombo,
+} from "../../assets/keyBindings";
 
 export default function Workspace(props) {
 	const [taskElements, setTaskElements] = React.useState([]);
 	const taskRefs = React.useRef([]);
 	const [focus, setFocus] = React.useState(props.tasks.length - 1);
+	const keyBindings = getKeyBindingsConfig();
 
 	React.useEffect(() => {
 		setTaskElements(getTaskElements());
@@ -24,7 +29,7 @@ export default function Workspace(props) {
 				addRef={addTaskRef}
 				text={task}
 				handleChange={(event) => taskInput(idx, event)}
-				handleKey={taskKey}
+				handleKey={() => taskKey(event, idx)}
 				handleClick={(event) => taskClick(idx, event)}
 				deleteTask={() => deleteTask(idx)}
 			/>
@@ -45,7 +50,7 @@ export default function Workspace(props) {
 		event.target.id.includes("task") && setFocus(idx);
 	}
 
-	function taskKey(event) {
+	function taskKey(event, idx) {
 		switch (event.key) {
 			case "Enter":
 				insertTask();
@@ -59,6 +64,8 @@ export default function Workspace(props) {
 				);
 				break;
 		}
+
+		handleCustomKeys(event, idx);
 	}
 
 	function insertTask() {
@@ -73,6 +80,27 @@ export default function Workspace(props) {
 		setFocus((prevFocus) => {
 			return prevFocus >= size ? size - 1 : prevFocus;
 		});
+	}
+
+	function handleCustomKeys(event, idx) {
+		const {
+			key,
+			metaKey: META,
+			shiftKey: SHIFT,
+			altKey: ALT,
+			ctrlKey: CTRL,
+		} = event;
+
+		const keyCombo = generateKeyCombo({ Key: key, META, SHIFT, ALT, CTRL });
+
+		console.log(keyCombo, keyBindings);
+
+		const binding = keyBindings[keyCombo];
+
+		if (binding) {
+			event.preventDefault();
+			eval(`${binding.Action}(${idx})`);
+		}
 	}
 
 	return (

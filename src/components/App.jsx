@@ -3,13 +3,11 @@ import Sidebar from "./sidebar/Sidebar";
 import Workspace from "./list/Workspace";
 
 export default function App() {
-	const sampleTasks = ["Thing 1", "Thing 2", "Thing 3"];
+	const sampleTasks = Array.from({ length: 4 }, (_, i) => `Thing ${i}`);
 	const [tasks, setTasks] = React.useState(sampleTasks);
 
 	function setTask(idx, task) {
-		if (idx == -2) {
-			setTasks((prevTasks) => prevTasks.slice(0, -1));
-		} else if (idx == -1) {
+		if (idx == -1) {
 			setTasks((prevTasks) => [...prevTasks, task]);
 		} else {
 			setTasks((prevTasks) => [
