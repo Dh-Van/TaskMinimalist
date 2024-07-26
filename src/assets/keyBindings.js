@@ -11,8 +11,10 @@ export function generateKeyCombo({ Key, META, SHIFT, ALT, CTRL }) {
 
 export function getKeyBindingsConfig() {
 	const keyBindings = [
+		{ Key: "Enter", Action: "addTask" },
+		{ Key: "ArrowUp", Action: "stepFocus(-1)" },
+		{ Key: "ArrowDown", Action: "stepFocus(1)" },
 		{ Key: "d", META: true, Action: "deleteTask" },
-		// Add more bindings as needed
 	];
 
 	return keyBindings.reduce((acc, binding) => {

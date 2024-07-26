@@ -51,24 +51,30 @@ export default function Workspace(props) {
 	}
 
 	function taskKey(event, idx) {
-		switch (event.key) {
-			case "Enter":
-				insertTask();
-				break;
-			case "ArrowUp":
-				setFocus((prevFocus) => Math.max(prevFocus - 1, 0));
-				break;
-			case "ArrowDown":
-				setFocus((prevFocus) =>
-					Math.min(prevFocus + 1, props.tasks.length - 1)
-				);
-				break;
-		}
+		const {
+			key,
+			metaKey: META,
+			shiftKey: SHIFT,
+			altKey: ALT,
+			ctrlKey: CTRL,
+		} = event;
 
-		handleCustomKeys(event, idx);
+		const binding =
+			keyBindings[generateKeyCombo({ Key: key, META, SHIFT, ALT, CTRL })];
+
+		console.log(typeof binding, binding);
+
+		if (binding) {
+			event.preventDefault();
+			if (binding.Action.includes("(")) {
+				eval(binding.Action);
+			} else {
+				eval(`${binding.Action}(${idx})`);
+			}
+		}
 	}
 
-	function insertTask() {
+	function addTask() {
 		props.setTask(-1, "");
 		setFocus(props.tasks.length);
 	}
@@ -82,34 +88,18 @@ export default function Workspace(props) {
 		});
 	}
 
-	function handleCustomKeys(event, idx) {
-		const {
-			key,
-			metaKey: META,
-			shiftKey: SHIFT,
-			altKey: ALT,
-			ctrlKey: CTRL,
-		} = event;
-
-		const keyCombo = generateKeyCombo({ Key: key, META, SHIFT, ALT, CTRL });
-
-		console.log(keyCombo, keyBindings);
-
-		const binding = keyBindings[keyCombo];
-
-		if (binding) {
-			event.preventDefault();
-			eval(`${binding.Action}(${idx})`);
-		}
+	function stepFocus(step) {
+		setFocus((prevFocus) => {
+			const newFocus = prevFocus + step;
+			return Math.max(0, Math.min(newFocus, props.tasks.length - 1));
+		});
 	}
 
 	return (
 		<div className="workspace">
 			<h1 className="workspace--title">Inbox</h1>
 			{taskElements}
-			{taskElements.length == 0 && (
-				<InsertButton handleClick={insertTask} />
-			)}
+			{taskElements.length == 0 && <InsertButton handleClick={addTask} />}
 		</div>
 	);
 }
