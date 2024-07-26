@@ -3,7 +3,13 @@ import Sidebar from "./sidebar/Sidebar";
 import Workspace from "./list/Workspace";
 
 export default function App() {
-	const sampleTasks = Array.from({ length: 4 }, (_, i) => `Thing ${i}`);
+	const sampleTasks = [
+		{ text: "Thing 1", priority: 0 },
+		{ text: "Thing 2", priority: 0 },
+		{ text: "Thing 3", priority: 0 },
+		{ text: "Thing 4", priority: 0 },
+	];
+
 	const [tasks, setTasks] = React.useState(sampleTasks);
 
 	function setTask(idx, task) {
@@ -24,7 +30,7 @@ export default function App() {
 	function insertTask(idx) {
 		setTasks((prevTasks) => [
 			...prevTasks.slice(0, idx + 1),
-			"",
+			{ text: "", priority: 0 },
 			...prevTasks.slice(idx + 1),
 		]);
 	}

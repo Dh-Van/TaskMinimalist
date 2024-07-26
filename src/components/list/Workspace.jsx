@@ -1,10 +1,7 @@
 import React from "react";
 import Task from "./Task";
 import InsertButton from "./InsertButton";
-import {
-	getKeyBindingsConfig,
-	generateKeyCombo,
-} from "../../assets/keyBindings";
+import { getKeyBindingsConfig, generateKeyCombo } from "../../assets/config";
 
 export default function Workspace(props) {
 	const [taskElements, setTaskElements] = React.useState([]);
@@ -22,14 +19,16 @@ export default function Workspace(props) {
 
 	function getTaskElements() {
 		taskRefs.current = [];
+		// console.log(props.tasks[0]);
 		return props.tasks.map((task, idx) => (
 			<Task
 				key={idx}
 				id={idx}
 				addRef={addTaskRef}
-				text={task}
+				text={task.text}
+				priority={task.priority}
 				handleChange={(event) => taskInput(idx, event)}
-				handleKey={() => taskKey(event, idx)}
+				handleKey={(event) => taskKey(event, idx)}
 				handleClick={(event) => taskClick(idx, event)}
 				deleteTask={() => deleteTask(idx)}
 			/>
@@ -43,7 +42,11 @@ export default function Workspace(props) {
 	}
 
 	function taskInput(idx, event) {
-		props.setTask(idx, event.target.value);
+		setTask(idx, { text: event.target.value, priority: 0 });
+	}
+
+	function setTask(idx, task) {
+		props.setTask(idx, { text: task.text, priority: task.priority });
 	}
 
 	function taskClick(idx, event) {
@@ -65,7 +68,13 @@ export default function Workspace(props) {
 		if (binding) {
 			event.preventDefault();
 			if (binding.Action.includes("(")) {
-				eval(binding.Action);
+				const paramOpenIndex = binding.Action.indexOf("(") + 1;
+				const functionString =
+					binding.Action.slice(0, paramOpenIndex) +
+					`${idx}, ` +
+					binding.Action.slice(paramOpenIndex);
+				console.log(functionString);
+				eval(functionString);
 			} else {
 				eval(`${binding.Action}(${idx})`);
 			}
@@ -86,19 +95,23 @@ export default function Workspace(props) {
 		});
 	}
 
-	function focusTask(idx) {
-		if (idx == -1) {
-			idx = props.tasks.length - 1;
+	function focusTask(idx, direction) {
+		if (direction == -1) {
+			direction = props.tasks.length - 1;
 		}
 
-		setFocus(idx);
+		setFocus(direction);
 	}
 
-	function stepFocus(step) {
+	function stepFocus(idx, step) {
 		setFocus((prevFocus) => {
 			const newFocus = prevFocus + step;
 			return Math.max(0, Math.min(newFocus, props.tasks.length - 1));
 		});
+	}
+
+	function setPriority(idx, priority) {
+		setTask(idx, { text: props.tasks[idx].text, priority: priority });
 	}
 
 	return (

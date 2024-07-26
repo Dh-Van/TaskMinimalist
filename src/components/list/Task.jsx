@@ -1,10 +1,13 @@
 import React from "react";
 import { Checkbox } from "@mui/material";
+import { getPriorityConfig } from "../../assets/config";
 
 export default function Task(props) {
+	const priorityConfig = getPriorityConfig();
+
 	const checkboxStyles = {
 		padding: "0px",
-		color: "var(--dark-top)",
+		color: priorityConfig[props.priority],
 		border: "1ps solid white",
 		"& .MuiSvgIcon-root": {
 			fontSize: "30px",
