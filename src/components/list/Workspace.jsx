@@ -1,5 +1,6 @@
 import React from "react";
 import Task from "./Task";
+import InsertButton from "./InsertButton";
 
 export default function Workspace(props) {
 	const [taskElements, setTaskElements] = React.useState([]);
@@ -78,6 +79,9 @@ export default function Workspace(props) {
 		<div className="workspace">
 			<h1 className="workspace--title">Inbox</h1>
 			{taskElements}
+			{taskElements.length == 0 && (
+				<InsertButton handleClick={insertTask} />
+			)}
 		</div>
 	);
 }
