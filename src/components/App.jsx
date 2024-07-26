@@ -7,20 +7,26 @@ export default function App() {
 	const [tasks, setTasks] = React.useState(sampleTasks);
 
 	function setTask(idx, task) {
-		if (idx == -1) {
-			setTasks((prevTasks) => [...prevTasks, task]);
-		} else {
-			setTasks((prevTasks) => [
-				...prevTasks.slice(0, idx),
-				task,
-				...prevTasks.slice(idx + 1),
-			]);
-		}
+		setTasks((prevTasks) => [
+			...prevTasks.slice(0, idx),
+			task,
+			...prevTasks.slice(idx + 1),
+		]);
 	}
 
 	function deleteTask(idx) {
 		setTasks((prevTasks) => [
 			...prevTasks.slice(0, idx),
+			...prevTasks.slice(idx + 1),
+		]);
+	}
+
+	function insertTask(idx) {
+		// console.log(tasks.slice(0, idx + 1));
+		// console.log(tasks.slice(idx + 1));
+		setTasks((prevTasks) => [
+			...prevTasks.slice(0, idx + 1),
+			"",
 			...prevTasks.slice(idx + 1),
 		]);
 	}
@@ -31,6 +37,7 @@ export default function App() {
 			<Workspace
 				tasks={tasks}
 				setTask={setTask}
+				insertTask={insertTask}
 				deleteTask={deleteTask}
 			/>
 		</div>

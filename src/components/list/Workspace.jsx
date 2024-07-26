@@ -62,8 +62,6 @@ export default function Workspace(props) {
 		const binding =
 			keyBindings[generateKeyCombo({ Key: key, META, SHIFT, ALT, CTRL })];
 
-		console.log(typeof binding, binding);
-
 		if (binding) {
 			event.preventDefault();
 			if (binding.Action.includes("(")) {
@@ -74,9 +72,10 @@ export default function Workspace(props) {
 		}
 	}
 
-	function addTask() {
-		props.setTask(-1, "");
-		setFocus(props.tasks.length);
+	function addTask(idx) {
+		// console.log(idx);
+		props.insertTask(idx);
+		setFocus(idx + 1);
 	}
 
 	function deleteTask(idx) {
