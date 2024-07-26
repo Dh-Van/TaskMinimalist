@@ -42,11 +42,12 @@ export default function Workspace(props) {
 	}
 
 	function taskInput(idx, event) {
-		setTask(idx, { text: event.target.value, priority: 0 });
+		setTask(idx, { ...props.tasks[idx], text: event.target.value });
 	}
 
 	function setTask(idx, task) {
 		props.setTask(idx, {
+			id: idx,
 			text: task.text,
 			priority: task.priority,
 			checked: task.checked,
@@ -77,7 +78,6 @@ export default function Workspace(props) {
 					binding.Action.slice(0, paramOpenIndex) +
 					`${idx}, ` +
 					binding.Action.slice(paramOpenIndex);
-				console.log(functionString);
 				eval(functionString);
 			} else {
 				eval(`${binding.Action}(${idx})`);
@@ -122,13 +122,17 @@ export default function Workspace(props) {
 		setTask(idx, { ...props.tasks[idx], priority: priority });
 	}
 
+	function sortTasks() {
+		props.setAllTasks(
+			[...props.tasks].sort((a, b) => a.priority - b.priority)
+		);
+	}
+
 	return (
 		<div className="workspace">
 			<h1 className="workspace--title">Inbox</h1>
+			<InsertButton handleClick={() => addTask(props.tasks.length - 1)} />
 			{taskElements}
-			{taskElements.length == 0 && (
-				<InsertButton handleClick={() => addTask(-1)} />
-			)}
 		</div>
 	);
 }
