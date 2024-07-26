@@ -144,3 +144,11 @@ html, head, body, #root {
 .task--input:focus {
     outline: none;
 }
+
+.fa-square-minus {
+    margin-right: 20px;
+
+    font-size: 20px;
+
+    color: red;
+}

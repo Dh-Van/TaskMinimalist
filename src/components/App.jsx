@@ -20,10 +20,21 @@ export default function App() {
 		}
 	}
 
+	function deleteTask(idx) {
+		setTasks((prevTasks) => [
+			...prevTasks.slice(0, idx),
+			...prevTasks.slice(idx + 1),
+		]);
+	}
+
 	return (
 		<div className="app">
 			<Sidebar name="Dhvan" />
-			<Workspace tasks={tasks} setTask={setTask} />
+			<Workspace
+				tasks={tasks}
+				setTask={setTask}
+				deleteTask={deleteTask}
+			/>
 		</div>
 	);
 }

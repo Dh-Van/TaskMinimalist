@@ -1,6 +1,5 @@
 import React from "react";
 import { Checkbox } from "@mui/material";
-import { pink } from "@mui/material/colors";
 
 export default function Task(props) {
 	const checkboxStyles = {
@@ -30,6 +29,10 @@ export default function Task(props) {
 				value={props.text}
 				onChange={handleChange}
 				onKeyDown={props.handleKey}
+			/>
+			<i
+				className="fa-regular fa-square-minus"
+				onClick={props.deleteTask}
 			/>
 		</div>
 	);

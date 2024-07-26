@@ -6,12 +6,42 @@ export default function Workspace(props) {
 	const [addingTask, setAddingTask] = React.useState(false);
 	const [focus, setFocus] = React.useState(props.tasks.length - 1);
 	const taskRefs = React.useRef([]);
+	const [taskElements, setTaskElements] = React.useState([]);
 
 	React.useEffect(() => {
+		setTaskElements(getTaskElements());
+
+		if (taskRefs.current[focus]) {
+			taskRefs.current[focus].focus();
+		}
+	}, [0]);
+
+	React.useEffect(() => {
+		const tE = getTaskElements();
+		// console.log(tE);
+		setTaskElements(tE);
+
+		console.log(taskRefs.current);
+
 		if (taskRefs.current[focus]) {
 			taskRefs.current[focus].focus();
 		}
 	}, [focus, props.tasks]);
+
+	function getTaskElements() {
+		return props.tasks.map((task, idx) => (
+			<Task
+				key={idx}
+				id={idx}
+				addRef={addInputRef}
+				text={task}
+				handleChange={textInput}
+				handleKey={taskKey}
+				handleClick={taskClick}
+				deleteTask={() => deleteTask(idx)}
+			/>
+		));
+	}
 
 	function taskClick(event) {
 		setAddingTask(true);
@@ -27,23 +57,15 @@ export default function Workspace(props) {
 		setFocus(props.tasks.length);
 	}
 
+	function deleteTask(idx) {
+		props.deleteTask(idx, idx);
+	}
+
 	function addInputRef(element) {
 		if (element && !taskRefs.current.includes(element)) {
 			taskRefs.current.push(element);
 		}
 	}
-
-	const taskElements = props.tasks.map((task, idx) => (
-		<Task
-			key={idx}
-			id={idx}
-			addRef={addInputRef}
-			text={task}
-			handleChange={textInput}
-			handleKey={taskKey}
-			handleClick={taskClick}
-		/>
-	));
 
 	function textInput(id, event) {
 		props.setTask(id, event.target.value);
