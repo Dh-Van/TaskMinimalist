@@ -15,7 +15,7 @@ export default function Task(props) {
 	};
 
 	function handleChange(event) {
-		props.handleChange(props.id, event);
+		props.handleChange(event);
 	}
 
 	return (

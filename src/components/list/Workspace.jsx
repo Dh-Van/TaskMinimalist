@@ -1,74 +1,47 @@
 import React from "react";
 import Task from "./Task";
-import InsertButton from "./InsertButton";
 
 export default function Workspace(props) {
-	const [addingTask, setAddingTask] = React.useState(false);
-	const [focus, setFocus] = React.useState(props.tasks.length - 1);
-	const taskRefs = React.useRef([]);
 	const [taskElements, setTaskElements] = React.useState([]);
+	const taskRefs = React.useRef([]);
+	const [focus, setFocus] = React.useState(props.tasks.length - 1);
 
 	React.useEffect(() => {
 		setTaskElements(getTaskElements());
-
-		if (taskRefs.current[focus]) {
-			taskRefs.current[focus].focus();
-		}
-	}, [0]);
+	}, [props.tasks, focus]);
 
 	React.useEffect(() => {
-		const tE = getTaskElements();
-		// console.log(tE);
-		setTaskElements(tE);
-
-		console.log(taskRefs.current);
-
-		if (taskRefs.current[focus]) {
-			taskRefs.current[focus].focus();
-		}
-	}, [focus, props.tasks]);
+		taskRefs.current[focus] && taskRefs.current[focus].focus();
+	}, [taskElements, focus]);
 
 	function getTaskElements() {
+		taskRefs.current = [];
 		return props.tasks.map((task, idx) => (
 			<Task
 				key={idx}
 				id={idx}
-				addRef={addInputRef}
+				addRef={addTaskRef}
 				text={task}
-				handleChange={textInput}
+				handleChange={(event) => taskInput(idx, event)}
 				handleKey={taskKey}
-				handleClick={taskClick}
+				handleClick={(event) => taskClick(idx, event)}
 				deleteTask={() => deleteTask(idx)}
 			/>
 		));
 	}
 
-	function taskClick(event) {
-		setAddingTask(true);
-		const idStr = event.target.id;
-		if (idStr) {
-			setFocus(Number(idStr.substring(idStr.lastIndexOf("-") + 1)));
-		}
-	}
-
-	function insertTask() {
-		setAddingTask(true);
-		props.setTask(-1, "");
-		setFocus(props.tasks.length);
-	}
-
-	function deleteTask(idx) {
-		props.deleteTask(idx, idx);
-	}
-
-	function addInputRef(element) {
+	function addTaskRef(element) {
 		if (element && !taskRefs.current.includes(element)) {
 			taskRefs.current.push(element);
 		}
 	}
 
-	function textInput(id, event) {
-		props.setTask(id, event.target.value);
+	function taskInput(idx, event) {
+		props.setTask(idx, event.target.value);
+	}
+
+	function taskClick(idx, event) {
+		event.target.id.includes("task") && setFocus(idx);
 	}
 
 	function taskKey(event) {
@@ -77,23 +50,41 @@ export default function Workspace(props) {
 				insertTask();
 				break;
 			case "ArrowUp":
-				setFocus((prevFocus) => prevFocus - 1);
+				setFocus((prevFocus) =>
+					prevFocus > 0 ? prevFocus - 1 : prevFocus
+				);
 				break;
 			case "ArrowDown":
-				setFocus((prevFocus) => prevFocus + 1);
+				setFocus((prevFocus) =>
+					prevFocus < props.tasks.length - 1
+						? prevFocus + 1
+						: prevFocus
+				);
 				break;
 		}
 	}
 
-	function idle() {
-		setAddingTask(false);
+	function insertTask() {
+		props.setTask(-1, "");
+		setFocus(props.tasks.length);
+	}
+
+	function deleteTask(idx) {
+		props.deleteTask(idx);
+		setFocus((prevFocus) => {
+			if (prevFocus >= props.tasks.length - 1) {
+				return props.tasks.length - 2; // Move focus to the last task if the last one was deleted
+			} else {
+				return prevFocus;
+			}
+		});
+		taskRefs.current.splice(idx, 1); // Remove the ref for the deleted task
 	}
 
 	return (
-		<div className="workspace" onClick={idle}>
+		<div className="workspace">
 			<h1 className="workspace--title">Inbox</h1>
 			{taskElements}
-			<InsertButton show={!addingTask} handleClick={insertTask} />
 		</div>
 	);
 }
