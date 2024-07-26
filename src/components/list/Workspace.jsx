@@ -50,15 +50,11 @@ export default function Workspace(props) {
 				insertTask();
 				break;
 			case "ArrowUp":
-				setFocus((prevFocus) =>
-					prevFocus > 0 ? prevFocus - 1 : prevFocus
-				);
+				setFocus((prevFocus) => Math.max(prevFocus - 1, 0));
 				break;
 			case "ArrowDown":
 				setFocus((prevFocus) =>
-					prevFocus < props.tasks.length - 1
-						? prevFocus + 1
-						: prevFocus
+					Math.min(prevFocus + 1, props.tasks.length - 1)
 				);
 				break;
 		}
@@ -71,14 +67,11 @@ export default function Workspace(props) {
 
 	function deleteTask(idx) {
 		props.deleteTask(idx);
+		const size = props.tasks.length - 1;
+
 		setFocus((prevFocus) => {
-			if (prevFocus >= props.tasks.length - 1) {
-				return props.tasks.length - 2; // Move focus to the last task if the last one was deleted
-			} else {
-				return prevFocus;
-			}
+			return prevFocus >= size ? size - 1 : prevFocus;
 		});
-		taskRefs.current.splice(idx, 1); // Remove the ref for the deleted task
 	}
 
 	return (
