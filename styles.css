@@ -1,93 +1,157 @@
-* {
-    margin: 0;
-    padding: 0;
-    color: white;
-    box-sizing: border-box;
+/* Variables */
+
+:root {
+    --sidebar-width: 20%;
+
+    --dark-top: #ffff;
+    --dark-1: #121212;
+    --dark-2: #212121;
+
+    --accent-top: #00bcd4;
+    --accent-1: #161b1c;
+    --accent-2: #2b3031;
+
+    --font-1: "Varela";
+    --font-2: "Space Grotesk";
 }
 
-html, head, body, #root{
+/* Global */
+
+* {
+    box-sizing: border-box;
+
+    margin: 0;
+    padding: 0;
+
+    /* color: var(--dark-top); */
+
+    font-family: var(--font-1), var(--font-2);
+}
+
+html, head, body, #root {
     width: 100vw;
     height: 100vh;
 }
 
-.app{
-    width: 100%;
-    height: 100%;
-    background-color: #121212;
+/* App */
+
+.app {
     display: flex;
-    /* padding-bottom: 0; */
-}
 
-.sidebar{    
-    padding: 20px;
-    width: 20%;
-    height: 100%;
-    background-color: #282828;
-}
-
-.workspace{
-    padding: 20px;
     width: 100%;
+    height: 100%;
+    
+    background-color: var(--dark-1);
+
+    color: var(--dark-top)
+}
+
+/* Sidebar */
+
+.sidebar {
     display: flex;
     flex-direction: column;
+    gap: 40px;
+
+    width: var(--sidebar-width);
+    height: 100%;
+
+    padding: 30px;
+
+    background-color: var(--accent-2);
+
+    font-size: 12px;
 }
 
-.workspace--inbox{
-    margin-block: 0px 20px;
+/* Workspace */
+
+.workspace {
+    display: block;
+
+    width: 100%;
+    height: 100%;
+
+    overflow: scroll;
+
+    /* padding: 35px; */
+
+    font-size: 18px;
 }
 
-.workspace--add-button{
+.workspace--title {
+    position: sticky;
+    margin: 35px;
+}
+
+/* Insert Button */
+
+.insert-button {
+    padding: 10px 20px;
+    margin-left: 15px;
     width: 80%;
-    background-color: transparent;
+    border: 0;
+    border-radius: 5px;
+    
+    font-size: 18px;
     text-align: left;
+
+    color: var(--dark-top);
+    background-color: transparent;
+}
+
+.insert-button:hover {
+    background-color: var(--accent-2);
+}
+
+/* Task */
+
+.task {
+    display: flex;
+
+    margin: 3px 15px;
+    padding-left: 20px;
+    border-radius: 5px;
+
+    width: 80%;
+
+    align-items: center;
+}
+
+.task--input {
+    background-color: transparent;
+    color: var(--dark-top);
+
+    width: 100%;
+    height: 100%;
+
+    margin: 10px 20px;
     border: 0px;
+    outline: none;
+
     font-size: 18px;
-    margin-block: 10px;
 }
 
-input {
-    width: 80%;
-    background-color: transparent;
-    text-align: left;
-    border: 1px solid white;
-    border-radius: 2px;
-    font-size: 18px;
-    text-indent: 15px;
+.task--checkbox {
+    height: 50px;
+    width: 50px;
 }
 
-input:focus{
+.task:hover {
+    background-color: var(--accent-2);
+}
+
+.task:focus-within {
+     background-color: var(--accent-2);
+}
+
+.task--input:focus {
     outline: none;
 }
 
-/* .task:hover{
-    background-color: red;
-} */
+.fa-square-minus {
+    margin-right: 20px;
 
-.task{
-    border: 0px;
-    padding-block: 5px;
-    display: flex;
-    align-items: center;
-    width: 80%;
-}
+    font-size: 20px;
 
-.task--checkbox{
-    width: 40px;
-}
-
-.task--text{
-    border: 0px;
-}
-
-.task:focus{
-    background-color: #282828;
-}
-
-.workspace--blank{
-    width: auto;
-    flex-grow: 1;
-}
-
-/* .workspace--add-button:hover{
     color: red;
-} */
+}
