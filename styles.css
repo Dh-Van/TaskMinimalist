@@ -46,17 +46,6 @@ html, head, body, #root {
     color: var(--dark-top)
 }
 
-.list {
-    display: flex;
-
-    width: 100%;
-    height: 100%;
-    
-    background-color: var(--dark-1);
-
-    color: var(--dark-top)
-}
-
 /* Sidebar */
 
 .sidebar {
@@ -72,97 +61,4 @@ html, head, body, #root {
     background-color: var(--accent-2);
 
     font-size: 12px;
-}
-
-/* Workspace */
-
-.workspace {
-    display: block;
-
-    width: 100%;
-    height: 100%;
-
-    overflow: scroll;
-
-    /* padding: 35px; */
-
-    font-size: 18px;
-}
-
-.workspace--title {
-    position: sticky;
-    margin: 35px;
-}
-
-/* Insert Button */
-
-.insert-button {
-    padding: 10px 20px;
-    margin-left: 15px;
-    width: 80%;
-    border: 0;
-    border-radius: 5px;
-    
-    font-size: 18px;
-    text-align: left;
-
-    color: var(--dark-top);
-    background-color: transparent;
-}
-
-.insert-button:hover {
-    background-color: var(--accent-2);
-}
-
-/* Task */
-
-.task {
-    display: flex;
-
-    margin: 3px 15px;
-    padding-left: 20px;
-    border-radius: 5px;
-
-    width: 80%;
-
-    align-items: center;
-}
-
-.task--input {
-    background-color: transparent;
-    color: var(--dark-top);
-
-    width: 100%;
-    height: 100%;
-
-    margin: 10px 20px;
-    border: 0px;
-    outline: none;
-
-    font-size: 18px;
-}
-
-.task--checkbox {
-    height: 50px;
-    width: 50px;
-}
-
-.task:hover {
-    background-color: var(--accent-2);
-}
-
-.task:focus-within {
-     background-color: var(--accent-2);
-}
-
-.task--input:focus {
-    outline: none;
-}
-
-.fa-square-minus {
-    margin-right: 20px;
-
-    font-size: 20px;
-
-    color: red;
 }

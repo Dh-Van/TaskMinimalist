@@ -22,12 +22,12 @@ export default function Task(props) {
 	}
 
 	return (
-		<div className="task" onClick={props.handleClick}>
+		<div className={`${props.className}--task`} onClick={props.handleClick}>
 			<Checkbox sx={checkboxStyles} checked={props.checked} />
 			<input
 				id={`task-${props.id}`}
 				ref={props.addRef}
-				className="task--input"
+				className={`${props.className}--task--input`}
 				type="text"
 				value={props.text}
 				onChange={handleChange}

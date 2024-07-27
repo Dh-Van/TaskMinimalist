@@ -1,5 +1,5 @@
 import React from "react";
-import Workspace from "./Workspace";
+import TaskContainer from "./TaskContainer";
 
 export default function List(props) {
 	const sampleTasks = [
@@ -50,24 +50,38 @@ export default function List(props) {
 	function getTasks() {
 		let localTasks = [];
 		let id = 0;
-		let localTask = localStorage.getItem(id);
+		let localTask = localStorage.getItem(`${props.title}-${id}`);
 		while (localTask) {
 			localTasks.push(JSON.parse(localTask));
-			localTask = localStorage.getItem(++id);
+			localTask = localStorage.getItem(`${props.title}-${++id}`);
 		}
 		return localTasks;
 	}
 
 	function storeTasks() {
-		localStorage.clear();
+		clearTasks();
 		tasks.map((task) =>
-			localStorage.setItem(task.id, JSON.stringify(task))
+			localStorage.setItem(
+				`${props.title}-${task.id}`,
+				JSON.stringify(task)
+			)
 		);
 	}
 
+	function clearTasks() {
+		let id = 0;
+		let localTask = localStorage.getItem(`${props.title}-${id}`);
+		while (localTask) {
+			localStorage.removeItem(`${props.title}-${id}`);
+			localTask = localStorage.getItem(`${props.title}-${++id}`);
+		}
+	}
+
 	return (
-		<div className="list">
-			<Workspace
+		<div className={`${props.className}--list`}>
+			<TaskContainer
+				className={props.className}
+				title={props.title}
 				tasks={tasks}
 				setTask={setTask}
 				setAllTasks={(tasks) => {

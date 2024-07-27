@@ -4,7 +4,7 @@ import InsertButton from "./InsertButton";
 import { getKeyBindingsConfig, generateKeyCombo } from "../../assets/utils";
 import config from "../../assets/config.json";
 
-export default function Workspace(props) {
+export default function TaskContainer(props) {
 	const [taskElements, setTaskElements] = React.useState([]);
 	const taskRefs = React.useRef([]);
 	const [focus, setFocus] = React.useState(props.tasks.length - 1);
@@ -22,6 +22,7 @@ export default function Workspace(props) {
 		taskRefs.current = [];
 		return props.tasks.map((task, idx) => (
 			<Task
+				className={props.className}
 				key={idx}
 				id={idx}
 				addRef={addTaskRef}
@@ -131,11 +132,14 @@ export default function Workspace(props) {
 		);
 	}
 
+	console.log(props);
+
 	return (
-		<div className="workspace">
-			<h1 className="workspace--title">Inbox</h1>
+		<div className={`${props.className}--task-container`}>
+			<h1 className={`${props.className}--title`}>{props.title}</h1>
 			{(config.alwaysShowAdd || props.tasks.length === 0) && (
 				<InsertButton
+					className={props.className}
 					handleClick={() => addTask(props.tasks.length - 1)}
 				/>
 			)}
