@@ -2,6 +2,7 @@ import React from "react";
 import Task from "./Task";
 import InsertButton from "./InsertButton";
 import { getKeyBindingsConfig, generateKeyCombo } from "../../assets/utils";
+import config from "../../assets/config.json";
 
 export default function Workspace(props) {
 	const [taskElements, setTaskElements] = React.useState([]);
@@ -133,7 +134,11 @@ export default function Workspace(props) {
 	return (
 		<div className="workspace">
 			<h1 className="workspace--title">Inbox</h1>
-			<InsertButton handleClick={() => addTask(props.tasks.length - 1)} />
+			{(config.alwaysShowAdd || props.tasks.length === 0) && (
+				<InsertButton
+					handleClick={() => addTask(props.tasks.length - 1)}
+				/>
+			)}
 			{taskElements}
 		</div>
 	);

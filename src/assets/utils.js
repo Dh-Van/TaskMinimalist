@@ -21,8 +21,5 @@ export function getKeyBindingsConfig() {
 }
 
 export function getPriorityConfig() {
-	return config.priority.map((element) => [
-		Number(element.id),
-		element.color,
-	]);
+	return config.priority.map((element) => [element.id, element.color]);
 }
