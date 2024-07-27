@@ -1,7 +1,7 @@
 import React from "react";
 import Task from "./Task";
 import InsertButton from "./InsertButton";
-import { getKeyBindingsConfig, generateKeyCombo } from "../../assets/config";
+import { getKeyBindingsConfig, generateKeyCombo } from "../../assets/utils";
 
 export default function Workspace(props) {
 	const [taskElements, setTaskElements] = React.useState([]);
@@ -124,7 +124,9 @@ export default function Workspace(props) {
 
 	function sortTasks() {
 		props.setAllTasks(
-			[...props.tasks].sort((a, b) => a.priority - b.priority)
+			[...props.tasks].sort(
+				(a, b) => !a.priority - !b.priority || a.priority - b.priority
+			)
 		);
 	}
 

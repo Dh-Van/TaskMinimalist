@@ -64,7 +64,6 @@ export default function App() {
 		tasks.map((task) =>
 			localStorage.setItem(task.id, JSON.stringify(task))
 		);
-		console.log(localStorage);
 	}
 
 	return (

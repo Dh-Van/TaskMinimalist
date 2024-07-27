@@ -1,6 +1,6 @@
 import React from "react";
 import { Checkbox } from "@mui/material";
-import { getPriorityConfig } from "../../assets/config";
+import { getPriorityConfig } from "../../assets/utils";
 
 export default function Task(props) {
 	const priorityConfig = getPriorityConfig();
