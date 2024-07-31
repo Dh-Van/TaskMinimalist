@@ -3,6 +3,15 @@ import List from "../list/List";
 import "../workspace/styles.css";
 
 export default function Workspace(props) {
-	// console.log(props.title);
-	return <List title={props.title} className="workspace" />;
+	return (
+		<List
+			global={{
+				title: props.workspace,
+				className: props.className,
+				workspace: props.workspace,
+				checkbox: true,
+			}}
+			setClickedTask={() => null}
+		/>
+	);
 }

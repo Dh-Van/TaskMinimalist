@@ -16,13 +16,15 @@ export default function TaskContainer(props) {
 
 	React.useEffect(() => {
 		taskRefs.current[focus] && taskRefs.current[focus].focus();
+		props.setClickedTask(props.tasks[focus] && props.tasks[focus].text);
 	}, [taskElements, focus]);
 
 	function getTaskElements() {
 		taskRefs.current = [];
 		return props.tasks.map((task, idx) => (
 			<Task
-				className={props.className}
+				className={props.global.className}
+				global={props.global}
 				key={idx}
 				id={idx}
 				addRef={addTaskRef}
@@ -58,6 +60,7 @@ export default function TaskContainer(props) {
 
 	function taskClick(idx, event) {
 		event.target.id.includes("task") && setFocus(idx);
+		// props.setClickedTask(event.target.value);
 	}
 
 	function taskKey(event, idx) {
@@ -132,14 +135,14 @@ export default function TaskContainer(props) {
 		);
 	}
 
-	console.log(props);
-
 	return (
-		<div className={`${props.className}--task-container`}>
-			<h1 className={`${props.className}--title`}>{props.title}</h1>
+		<div className={`${props.global.className}--task-container`}>
+			<h1 className={`${props.global.className}--title`}>
+				{props.global.title}
+			</h1>
 			{(config.alwaysShowAdd || props.tasks.length === 0) && (
 				<InsertButton
-					className={props.className}
+					className={props.global.className}
 					handleClick={() => addTask(props.tasks.length - 1)}
 				/>
 			)}

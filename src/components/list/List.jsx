@@ -15,6 +15,11 @@ export default function List(props) {
 		storeTasks();
 	}, [tasks]);
 
+	React.useEffect(() => {
+		// deleteAllTasks();
+		setTasks(getTasks());
+	}, [props.global.workspace]);
+
 	function setTask(idx, task) {
 		setTasks((prevTasks) => [
 			...prevTasks.slice(0, idx),
@@ -32,6 +37,10 @@ export default function List(props) {
 		resetID();
 	}
 
+	function deleteAllTasks() {
+		setTasks([]);
+	}
+
 	function insertTask(idx) {
 		setTasks((prevTasks) => [
 			...prevTasks.slice(0, idx + 1),
@@ -47,13 +56,19 @@ export default function List(props) {
 		);
 	}
 
+	function setClickedTask(task) {
+		props.setClickedTask(task);
+	}
+
 	function getTasks() {
 		let localTasks = [];
 		let id = 0;
-		let localTask = localStorage.getItem(`${props.title}-${id}`);
+		let localTask = localStorage.getItem(`${props.global.workspace}-${id}`);
 		while (localTask) {
 			localTasks.push(JSON.parse(localTask));
-			localTask = localStorage.getItem(`${props.title}-${++id}`);
+			localTask = localStorage.getItem(
+				`${props.global.workspace}-${++id}`
+			);
 		}
 		return localTasks;
 	}
@@ -62,7 +77,7 @@ export default function List(props) {
 		clearTasks();
 		tasks.map((task) =>
 			localStorage.setItem(
-				`${props.title}-${task.id}`,
+				`${props.global.workspace}-${task.id}`,
 				JSON.stringify(task)
 			)
 		);
@@ -70,24 +85,28 @@ export default function List(props) {
 
 	function clearTasks() {
 		let id = 0;
-		let localTask = localStorage.getItem(`${props.title}-${id}`);
+		let localTask = localStorage.getItem(`${props.global.workspace}-${id}`);
 		while (localTask) {
-			localStorage.removeItem(`${props.title}-${id}`);
-			localTask = localStorage.getItem(`${props.title}-${++id}`);
+			localStorage.removeItem(`${props.global.workspace}-${id}`);
+			localTask = localStorage.getItem(
+				`${props.global.workspace}-${++id}`
+			);
 		}
 	}
 
+	console.log(localStorage);
+
 	return (
-		<div className={`${props.className}--list`}>
+		<div className={`${props.global.className}--list`}>
 			<TaskContainer
-				className={props.className}
-				title={props.title}
+				global={props.global}
 				tasks={tasks}
 				setTask={setTask}
 				setAllTasks={(tasks) => {
 					setTasks(tasks);
 					resetID();
 				}}
+				setClickedTask={setClickedTask}
 				insertTask={insertTask}
 				deleteTask={deleteTask}
 			/>
