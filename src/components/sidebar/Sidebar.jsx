@@ -1,10 +1,21 @@
 import React from "react";
+import List from "../list/List";
+import "../sidebar/styles.css";
 
 export default function Sidebar(props) {
 	return (
 		<div className="sidebar">
-			<h1>{props.name}</h1>
-			<h2>Inbox</h2>
+			<List
+				global={{
+					className: props.className,
+					title: props.title,
+					checkbox: false,
+				}}
+				setClickedTask={(task) => props.setWorkspace(task)}
+			/>
+			<button onClick={() => localStorage.clear()}>
+				Clear Local Storage
+			</button>
 		</div>
 	);
 }

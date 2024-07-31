@@ -1,0 +1,95 @@
+/* Sidebar */
+
+.sidebar--list {
+    display: flex;
+
+    width: 100%;
+    height: 100%;
+    
+    background-color: var(--acceent-1);
+
+    color: var(--dark-top)
+}
+
+.sidebar--task-container {
+    display: block;
+
+    width: 100%;
+    height: 100%;
+
+    overflow: scroll;
+
+    font-size: 18px;
+}
+
+/* .sidebar--title {
+    position: sticky;
+} */
+
+/* Insert Button */
+
+.sidebar--insert-button {
+    padding: 10px 20px;
+    margin-left: 15px;
+    width: 80%;
+    border: 0;
+    border-radius: 5px;
+    
+    font-size: 18px;
+    text-align: left;
+
+    color: var(--dark-top);
+    background-color: transparent;
+}
+
+.sidebar--insert-button:hover {
+    background-color: var(--accent-2);
+}
+
+/* Task */
+
+.sidebar--task {
+    display: flex;
+
+    margin: 3px 5px;
+    border-radius: 5px;
+
+    width: 80%;
+
+    align-items: center;
+}
+
+.sidebar--task--input {
+    background-color: transparent;
+    color: var(--dark-top);
+
+    width: 100%;
+    height: 100%;
+    margin: 10px 0px;
+
+    text-indent: 5px;
+    border: 0px;
+    outline: none;
+
+    font-size: 18px;
+}
+
+.sidebar--task:hover {
+    background-color: var(--accent-top);
+}
+
+.sidebar--task:focus-within {
+     background-color: var(--accent-top);
+}
+
+.sidebar--task--input:focus {
+    outline: none;
+}
+
+.fa-square-minus {
+    margin-right: 20px;
+
+    font-size: 20px;
+
+    color: red;
+}
