@@ -1,16 +1,9 @@
 {
     "keyBindings": [
-		{ "Key": "Enter", "Action": "addTask" },
-		{ "Key": "ArrowUp", "Action": "stepFocus(-1)" },
-		{ "Key": "ArrowDown", "Action": "stepFocus(1)" },
-		{ "Key": "d", "META": true, "Action": "deleteTask" },
-		{ "Key": "ArrowUp", "ALT": true, "Action": "focusTask(0)" },
-		{ "Key": "ArrowDown", "ALT": true, "Action": "focusTask(-1)" },
-		{ "Key": "Enter", "META": true, "Action": "check" },
-		{ "Key": "0", "META": true, "Action": "setPriority(0)" },
-		{ "Key": "1", "META": true, "Action": "setPriority(1)" },
-		{ "Key": "2", "META": true, "Action": "setPriority(2)" },
-		{ "Key": "3", "META": true, "Action": "setPriority(3)" },
-		{ "Key": "4", "META": true, "Action": "setPriority(4)" },
-		{ "Key": "s", "META": true, "Action": "sortTasks" }
+		{ "Key": "Enter", "Action": "addItem" },
+		{ "Key": "d", "META": true, "Action": "deleteItem" },
+		{ "Key": "ArrowUp", "Action": "stepFocus, -1" },
+		{ "Key": "ArrowDown", "Action": "stepFocus, 1" },
+		{ "Key": "ArrowUp", "ALT": true, "Action": "edgeFocus, 0" },
+		{ "Key": "ArrowDown", "ALT": true, "Action": "edgeFocus, -1" }
 ]}

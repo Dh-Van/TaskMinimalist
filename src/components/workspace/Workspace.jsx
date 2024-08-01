@@ -11,14 +11,6 @@ export default function Workspace(props) {
 
 	const [listItems, setListItems] = React.useState(sampleListData);
 
-	function setValue(id, key, value) {
-		setListItems((prevItems) => [
-			...prevItems.slice(0, id),
-			{ ...prevItems[id], [key]: value },
-			...prevItems.slice(id + 1),
-		]);
-	}
-
 	function getListItemElements() {
 		return listItems.map((item) => {
 			return (
@@ -31,10 +23,15 @@ export default function Workspace(props) {
 			);
 		});
 	}
+
 	return (
 		<div className="workspace">
 			<h1>Inbox</h1>
-			<List items={getListItemElements()} setValue={setValue} />
+			<List
+				items={getListItemElements()}
+				setListItems={setListItems}
+				emptyItem={{ id: 0, text: "", selected: false }}
+			/>
 		</div>
 	);
 }

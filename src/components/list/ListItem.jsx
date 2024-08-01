@@ -5,6 +5,7 @@ export default function ListItem(props) {
 		<div className="list-item">
 			<input
 				type="text"
+				onClick={props.parameters.onClick}
 				onChange={props.parameters.handleChange}
 				onKeyDown={props.parameters.handleKeyDown}
 				value={props.value}
