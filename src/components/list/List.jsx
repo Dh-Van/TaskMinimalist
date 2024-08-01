@@ -7,12 +7,13 @@ export default function List(props) {
 
 	React.useEffect(() => {
 		setItems(
-			props.items.map((item) =>
+			props.items.map((item, idx) =>
 				React.cloneElement(item, {
-					handleClick: handleClick,
-					handleChange: handleChange,
-					handleKeyDown: handleKeyDown,
-					addRef: addItemRef,
+					parameters: {
+						handleChange: (event) => handleChange(idx, event),
+						handleKeyDown: (event) => handleKeyDown(idx, event),
+						addRef: addItemRef(),
+					},
 				})
 			)
 		);

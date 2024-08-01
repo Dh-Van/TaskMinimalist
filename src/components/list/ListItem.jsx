@@ -5,10 +5,10 @@ export default function ListItem(props) {
 		<div className="list-item">
 			<input
 				type="text"
-				onChange={props.handleChange}
-				onKeyDown={props.handleKeyDown}
+				onChange={props.parameters.handleChange}
+				onKeyDown={props.parameters.handleKeyDown}
 				value={props.value}
-				ref={props.addRef}
+				ref={props.parameters.addRef}
 			/>
 		</div>
 	);

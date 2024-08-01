@@ -12,12 +12,7 @@ export default function Task(props) {
 			onClick={(event) => props.handleClick(props.id, event)}
 		>
 			<input type="checkbox" />
-			<ListItem
-				value={props.text}
-				handleChange={(event) => props.handleChange(props.id, event)}
-				handleKeyDown={(event) => props.handleKeyDown(props.id, event)}
-				addRef={props.addRef}
-			/>
+			<ListItem parameters={props.parameters} value={props.text} />
 			<i className="fa-regular fa-square-minus" />
 		</div>
 	);
