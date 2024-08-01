@@ -7,10 +7,7 @@ export default function Task(props) {
 	}
 
 	return (
-		<div
-			className="task"
-			onClick={(event) => props.handleClick(props.id, event)}
-		>
+		<div className="task" onClick={props.parameters.handleClick}>
 			<input type="checkbox" />
 			<ListItem parameters={props.parameters} value={props.text} />
 			<i className="fa-regular fa-square-minus" />

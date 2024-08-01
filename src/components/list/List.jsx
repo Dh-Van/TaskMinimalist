@@ -10,9 +10,10 @@ export default function List(props) {
 			props.items.map((item, idx) =>
 				React.cloneElement(item, {
 					parameters: {
+						onClick: (event) => handleClick(idx, event),
 						handleChange: (event) => handleChange(idx, event),
 						handleKeyDown: (event) => handleKeyDown(idx, event),
-						addRef: addItemRef(),
+						addRef: (element) => addItemRef(element),
 					},
 				})
 			)
@@ -21,6 +22,7 @@ export default function List(props) {
 
 	React.useEffect(() => {
 		itemRefs.current[focus] && itemRefs.current[focus].focus();
+		console.log(itemRefs);
 	}, [items, focus]);
 
 	function addItemRef(element) {
