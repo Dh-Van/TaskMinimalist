@@ -20,7 +20,6 @@ export default function Sidebar(props) {
 	return (
 		<div className="sidebar">
 			<h1>Dhvan</h1>
-
 			<List
 				name="sidebar"
 				items={listItems}
@@ -30,6 +29,14 @@ export default function Sidebar(props) {
 				customClickHandler={customClickHandler}
 				// customKeyHandler={customHandler}
 			/>
+			<button
+				onClick={() => {
+					localStorage.clear();
+					location.reload();
+				}}
+			>
+				Clear ALL local storage
+			</button>
 		</div>
 	);
 }
