@@ -8,19 +8,19 @@ import {
 export default function List(props) {
 	const [items, setItems] = React.useState([]);
 	const itemRefs = React.useRef([]);
-	const [focus, setFocus] = React.useState(props.items.length - 1);
+	const [focus, setFocus] = React.useState(props.itemElements.length - 1);
 
 	const keyBindings = getKeyBindingsConfig();
 
 	React.useEffect(() => {
 		props.setListItems(getTasks());
-	}, [0]);
+	}, [0, props.name]);
 
 	React.useEffect(() => {
-		storeItems(props.items);
+		storeItems(props.itemElements);
 		itemRefs.current = [];
 		setItems(
-			props.items.map((item, idx) =>
+			props.itemElements.map((item, idx) =>
 				React.cloneElement(item, {
 					parameters: {
 						onClick: (event) => handleClick(idx, event),
@@ -31,7 +31,7 @@ export default function List(props) {
 				})
 			)
 		);
-	}, [props.items]);
+	}, [props.itemElements]);
 
 	React.useEffect(() => {
 		itemRefs.current[focus] && itemRefs.current[focus].focus();
@@ -45,7 +45,7 @@ export default function List(props) {
 
 	function storeItems() {
 		clearItems();
-		props.raw.map((item) =>
+		props.items.map((item) =>
 			localStorage.setItem(
 				`${props.name}-${item.id}`,
 				JSON.stringify(item)
@@ -87,6 +87,7 @@ export default function List(props) {
 
 	function handleClick(id, event) {
 		setFocus(id);
+		props.customClickHandler && props.customClickHandler(id, event);
 	}
 
 	function handleKeyDown(id, event) {
@@ -122,7 +123,8 @@ export default function List(props) {
 			try {
 				eval(functionString);
 			} catch (error) {
-				props.customHandler(functionString);
+				props.customKeyHandler &&
+					props.customKeyHandler(functionString);
 			}
 		}
 	}
@@ -144,7 +146,7 @@ export default function List(props) {
 		]);
 		resetId(props.setListItems);
 
-		const size = props.items.length - 1;
+		const size = props.itemElements.length - 1;
 		setFocus((prevFocus) => {
 			return prevFocus >= size ? size - 1 : prevFocus;
 		});
@@ -153,13 +155,16 @@ export default function List(props) {
 	function stepFocus(idx, step) {
 		setFocus((prevFocus) => {
 			const newFocus = prevFocus + step;
-			return Math.max(0, Math.min(newFocus, props.items.length - 1));
+			return Math.max(
+				0,
+				Math.min(newFocus, props.itemElements.length - 1)
+			);
 		});
 	}
 
 	function edgeFocus(idx, direction) {
 		if (direction == -1) {
-			direction = props.items.length - 1;
+			direction = props.itemElements.length - 1;
 		}
 
 		setFocus(direction);
@@ -167,7 +172,7 @@ export default function List(props) {
 
 	return (
 		<div className="list">
-			{props.items.length === 0 && (
+			{props.itemElements.length === 0 && (
 				<button onClick={() => addItem(-1)}>Insert Task</button>
 			)}
 			{items}

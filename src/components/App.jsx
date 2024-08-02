@@ -1,10 +1,14 @@
 import React from "react";
 import Workspace from "./workspace/Workspace";
+import Sidebar from "./sidebar/Sidebar";
 
 export default function App() {
+	const [workspace, setWorkspace] = React.useState("");
+
 	return (
 		<div className="app">
-			<Workspace name={"Inbox"} />
+			<Sidebar setWorkspace={setWorkspace} />
+			<Workspace name={workspace} />
 		</div>
 	);
 }

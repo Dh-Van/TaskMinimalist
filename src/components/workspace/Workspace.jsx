@@ -12,6 +12,10 @@ export default function Workspace(props) {
 
 	const [listItems, setListItems] = React.useState([]);
 
+	// React.useEffect(() => {
+	// 	setListItems([]);
+	// }, [props.name]);
+
 	function getListItemElements() {
 		return listItems.map((item) => {
 			return (
@@ -33,7 +37,7 @@ export default function Workspace(props) {
 		]);
 	}
 
-	function customHandler(functionString) {
+	function customKeyHandler(functionString) {
 		eval(functionString);
 	}
 
@@ -59,11 +63,11 @@ export default function Workspace(props) {
 			<h1>{props.name}</h1>
 			<List
 				name={props.name}
-				raw={listItems}
-				items={getListItemElements()}
+				items={listItems}
+				itemElements={getListItemElements()}
 				setListItems={setListItems}
 				emptyItem={{ id: 0, text: "", priority: 0, selected: false }}
-				customHandler={customHandler}
+				customKeyHandler={customKeyHandler}
 			/>
 		</div>
 	);

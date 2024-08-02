@@ -50,3 +50,8 @@ html, head, body, #root {
     display: flex;
     align-items: center;
 }
+
+.board {
+    display: flex;
+    align-items: center;
+}
