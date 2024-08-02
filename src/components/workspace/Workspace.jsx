@@ -32,9 +32,7 @@ export default function Workspace(props) {
 		]);
 	}
 
-	const keyBinds = [{ Key: "Enter", META: "true", Action: "addItem" }];
-
-	function handleCustomKeyBinds(functionString) {
+	function customHandler(functionString) {
 		eval(functionString);
 	}
 
@@ -58,9 +56,7 @@ export default function Workspace(props) {
 				items={getListItemElements()}
 				setListItems={setListItems}
 				emptyItem={{ id: 0, text: "", priority: 0, selected: false }}
-				customKeyBinds={(functionString) =>
-					handleCustomKeyBinds(functionString)
-				}
+				customHandler={customHandler}
 			/>
 		</div>
 	);

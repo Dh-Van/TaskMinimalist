@@ -83,7 +83,7 @@ export default function List(props) {
 			try {
 				eval(functionString);
 			} catch (error) {
-				props.customKeyBinds(functionString);
+				props.customHandler(functionString);
 			}
 		}
 	}
