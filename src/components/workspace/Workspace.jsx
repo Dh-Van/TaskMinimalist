@@ -1,6 +1,7 @@
 import React from "react";
 import Task from "./Task";
 import List from "../list/List";
+import { resetId } from "../../assets/utils";
 
 export default function Workspace(props) {
 	const sampleListData = [
@@ -47,7 +48,11 @@ export default function Workspace(props) {
 				(a, b) => !a.priority - !b.priority || a.priority - b.priority
 			)
 		);
+
+		resetId(setListItems);
 	}
+
+	console.log(listItems);
 
 	return (
 		<div className="workspace">

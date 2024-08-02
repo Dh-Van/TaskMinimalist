@@ -1,5 +1,9 @@
 import React from "react";
-import { getKeyBindingsConfig, generateKeyCombo } from "../../assets/utils";
+import {
+	getKeyBindingsConfig,
+	generateKeyCombo,
+	resetId,
+} from "../../assets/utils";
 
 export default function List(props) {
 	const [items, setItems] = React.useState([]);
@@ -94,8 +98,7 @@ export default function List(props) {
 			{ ...props.emptyItem, id: id },
 			...prevItems.slice(id + 1),
 		]);
-		resetId();
-
+		resetId(props.setListItems);
 		setFocus(id + 1);
 	}
 
@@ -104,18 +107,12 @@ export default function List(props) {
 			...prevItems.slice(0, id),
 			...prevItems.slice(id + 1),
 		]);
-		resetId();
+		resetId(props.setListItems);
 
 		const size = props.items.length - 1;
 		setFocus((prevFocus) => {
 			return prevFocus >= size ? size - 1 : prevFocus;
 		});
-	}
-
-	function resetId() {
-		props.setListItems((prevItems) =>
-			prevItems.map((item, idx) => ({ ...item, id: idx }))
-		);
 	}
 
 	function stepFocus(idx, step) {
@@ -133,5 +130,12 @@ export default function List(props) {
 		setFocus(direction);
 	}
 
-	return <div className="list">{items}</div>;
+	return (
+		<div className="list">
+			{props.items.length === 0 && (
+				<button onClick={() => addItem(-1)}>Insert Task</button>
+			)}
+			{items}
+		</div>
+	);
 }

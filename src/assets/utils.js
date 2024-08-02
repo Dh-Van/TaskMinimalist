@@ -23,3 +23,9 @@ export function getKeyBindingsConfig() {
 export function getPriorityConfig() {
 	return config.priority.map((element) => [element.id, element.color]);
 }
+
+export function resetId(arrySetter) {
+	arrySetter((prevItems) =>
+		prevItems.map((item, idx) => ({ ...item, id: idx }))
+	);
+}
