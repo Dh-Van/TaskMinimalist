@@ -10,7 +10,7 @@ export default function Workspace(props) {
 		{ id: 2, text: "task 3", priority: 0, selected: false },
 	];
 
-	const [listItems, setListItems] = React.useState(sampleListData);
+	const [listItems, setListItems] = React.useState([]);
 
 	function getListItemElements() {
 		return listItems.map((item) => {
@@ -52,12 +52,14 @@ export default function Workspace(props) {
 		resetId(setListItems);
 	}
 
-	console.log(listItems);
+	console.log(localStorage);
 
 	return (
 		<div className="workspace">
-			<h1>Inbox</h1>
+			<h1>{props.name}</h1>
 			<List
+				name={props.name}
+				raw={listItems}
 				items={getListItemElements()}
 				setListItems={setListItems}
 				emptyItem={{ id: 0, text: "", priority: 0, selected: false }}

@@ -13,6 +13,11 @@ export default function List(props) {
 	const keyBindings = getKeyBindingsConfig();
 
 	React.useEffect(() => {
+		props.setListItems(getTasks());
+	}, [0]);
+
+	React.useEffect(() => {
+		storeItems(props.items);
 		itemRefs.current = [];
 		setItems(
 			props.items.map((item, idx) =>
@@ -36,6 +41,36 @@ export default function List(props) {
 		if (element && !itemRefs.current.includes(element)) {
 			itemRefs.current.push(element);
 		}
+	}
+
+	function storeItems() {
+		clearItems();
+		props.raw.map((item) =>
+			localStorage.setItem(
+				`${props.name}-${item.id}`,
+				JSON.stringify(item)
+			)
+		);
+	}
+
+	function clearItems() {
+		let id = 0;
+		let localItem = localStorage.getItem(`${props.name}-${id}`);
+		while (localItem) {
+			localStorage.removeItem(`${props.name}-${id}`);
+			localItem = localStorage.getItem(`${props.name}-${++id}`);
+		}
+	}
+
+	function getTasks() {
+		let localItems = [];
+		let id = 0;
+		let localItem = localStorage.getItem(`${props.name}-${id}`);
+		while (localItem) {
+			localItems.push(JSON.parse(localItem));
+			localItem = localStorage.getItem(`${props.name}-${++id}`);
+		}
+		return localItems;
 	}
 
 	function handleChange(id, event) {

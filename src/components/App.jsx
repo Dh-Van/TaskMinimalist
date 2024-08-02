@@ -4,7 +4,7 @@ import Workspace from "./workspace/Workspace";
 export default function App() {
 	return (
 		<div className="app">
-			<Workspace />
+			<Workspace name={"Inbox"} />
 		</div>
 	);
 }
