@@ -5,5 +5,11 @@
 		{ "Key": "ArrowUp", "Action": "stepFocus, -1" },
 		{ "Key": "ArrowDown", "Action": "stepFocus, 1" },
 		{ "Key": "ArrowUp", "ALT": true, "Action": "edgeFocus, 0" },
-		{ "Key": "ArrowDown", "ALT": true, "Action": "edgeFocus, -1" }
+		{ "Key": "ArrowDown", "ALT": true, "Action": "edgeFocus, -1" },
+		{ "Key": "s", "META": true, "Action": "sortItems" },
+		{ "Key": "0", "META": true, "Action": "setPriority, 0" },
+		{ "Key": "1", "META": true, "Action": "setPriority, 1" },
+		{ "Key": "2", "META": true, "Action": "setPriority, 2" },
+		{ "Key": "3", "META": true, "Action": "setPriority, 3" },
+		{ "Key": "4", "META": true, "Action": "setPriority, 4" }
 ]}

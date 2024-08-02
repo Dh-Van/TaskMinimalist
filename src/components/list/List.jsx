@@ -80,7 +80,11 @@ export default function List(props) {
 				(param) => `${param}`
 			)})`;
 
-			eval(functionString);
+			try {
+				eval(functionString);
+			} catch (error) {
+				props.customKeyBinds(functionString);
+			}
 		}
 	}
 

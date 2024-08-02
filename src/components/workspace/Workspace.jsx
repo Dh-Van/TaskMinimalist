@@ -4,9 +4,9 @@ import List from "../list/List";
 
 export default function Workspace(props) {
 	const sampleListData = [
-		{ id: 0, text: "task 1", selected: true },
-		{ id: 1, text: "task 2", selected: false },
-		{ id: 2, text: "task 3", selected: false },
+		{ id: 0, text: "task 1", priority: 0, selected: true },
+		{ id: 1, text: "task 2", priority: 0, selected: false },
+		{ id: 2, text: "task 3", priority: 0, selected: false },
 	];
 
 	const [listItems, setListItems] = React.useState(sampleListData);
@@ -24,13 +24,43 @@ export default function Workspace(props) {
 		});
 	}
 
+	function setValue(id, key, value) {
+		setListItems((prevItems) => [
+			...prevItems.slice(0, id),
+			{ ...prevItems[id], [key]: value },
+			...prevItems.slice(id + 1),
+		]);
+	}
+
+	const keyBinds = [{ Key: "Enter", META: "true", Action: "addItem" }];
+
+	function handleCustomKeyBinds(functionString) {
+		eval(functionString);
+	}
+
+	function setPriority(id, priority) {
+		setValue(id, "priority", priority);
+	}
+
+	function sortItems(id) {
+		console.log("sorted");
+		setListItems(
+			[...listItems].sort(
+				(a, b) => !a.priority - !b.priority || a.priority - b.priority
+			)
+		);
+	}
+
 	return (
 		<div className="workspace">
 			<h1>Inbox</h1>
 			<List
 				items={getListItemElements()}
 				setListItems={setListItems}
-				emptyItem={{ id: 0, text: "", selected: false }}
+				emptyItem={{ id: 0, text: "", priority: 0, selected: false }}
+				customKeyBinds={(functionString) =>
+					handleCustomKeyBinds(functionString)
+				}
 			/>
 		</div>
 	);
