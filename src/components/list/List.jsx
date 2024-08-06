@@ -35,6 +35,12 @@ export default function List(props) {
 
 	React.useEffect(() => {
 		itemRefs.current[focus] && itemRefs.current[focus].focus();
+
+		// props.setListItems((prevItems) =>
+		// 	prevItems.map((item) => ({ ...item, selected: false }))
+		// );
+
+		// setValue(focus, "selected", true);
 	}, [items, focus]);
 
 	function addItemRef(element) {
@@ -124,7 +130,7 @@ export default function List(props) {
 				eval(functionString);
 			} catch (error) {
 				props.customKeyHandler &&
-					props.customKeyHandler(functionString);
+					props.customKeyHandler(functionString, id, event);
 			}
 		}
 	}
@@ -169,6 +175,8 @@ export default function List(props) {
 
 		setFocus(direction);
 	}
+
+	console.log(props.items);
 
 	return (
 		<div className="list">

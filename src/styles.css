@@ -46,12 +46,19 @@ html, head, body, #root {
     color: var(--dark-top)
 }
 
-.task {
-    display: flex;
-    align-items: center;
+.sidebar {
+    width: 20%;
+    padding: 20px;
+
+    background-color: var(--accent-2);
 }
 
-.board {
+.workspace {
+    width: 80%;
+}
+
+.task, .board {
     display: flex;
-    align-items: center;
+
+    width: 100%;
 }

@@ -9,7 +9,11 @@ export default function Task(props) {
 	return (
 		<div className="task" onClick={props.parameters.handleClick}>
 			<input type="checkbox" />
-			<ListItem parameters={props.parameters} value={props.text} />
+			<ListItem
+				parameters={props.parameters}
+				value={props.text}
+				className="task--input"
+			/>
 			<i className="fa-regular fa-square-minus" />
 		</div>
 	);

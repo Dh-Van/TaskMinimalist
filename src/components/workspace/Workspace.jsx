@@ -56,7 +56,7 @@ export default function Workspace(props) {
 		resetId(setListItems);
 	}
 
-	console.log(localStorage);
+	// console.log(localStorage);
 
 	return (
 		<div className="workspace">

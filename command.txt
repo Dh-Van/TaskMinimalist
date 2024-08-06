@@ -1,0 +1,1 @@
+repo2txt --exclude-dir node_modules src/archive --ignore-types .png .cjs .md --ignore-files vite.config.js package-lock.json package.json README.md

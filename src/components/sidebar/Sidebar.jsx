@@ -4,7 +4,7 @@ import Board from "./Board";
 
 export default function Sidebar(props) {
 	const [listItems, setListItems] = React.useState([
-		{ id: "0", text: "Inbox" },
+		{ id: "0", text: "Inbox", seleceted: true },
 	]);
 
 	function getListItemElements() {
@@ -13,8 +13,16 @@ export default function Sidebar(props) {
 		});
 	}
 
+	function setValue(id, key, value) {
+		setListItems((prevItems) => [
+			...prevItems.slice(0, id),
+			{ ...prevItems[id], [key]: value },
+			...prevItems.slice(id + 1),
+		]);
+	}
+
 	function customClickHandler(id, event) {
-		props.setWorkspace(listItems[id].text);
+		setValue(id, "selected", true);
 	}
 
 	return (
@@ -27,7 +35,6 @@ export default function Sidebar(props) {
 				setListItems={setListItems}
 				emptyItem={{ id: 0, text: "", priority: 0, selected: false }}
 				customClickHandler={customClickHandler}
-				// customKeyHandler={customHandler}
 			/>
 			<button
 				onClick={() => {

@@ -1,0 +1,603 @@
+Repository Documentation
+This document provides a comprehensive overview of the repository's structure and contents.
+The first section, titled 'Directory/File Tree', displays the repository's hierarchy in a tree format.
+In this section, directories and files are listed using tree branches to indicate their structure and relationships.
+Following the tree representation, the 'File Content' section details the contents of each file in the repository.
+Each file's content is introduced with a '[File Begins]' marker followed by the file's relative path,
+and the content is displayed verbatim. The end of each file's content is marked with a '[File Ends]' marker.
+This format ensures a clear and orderly presentation of both the structure and the detailed contents of the repository.
+
+Directory/File Tree Begins -->
+
+TaskMinimalist/
+├── command.txt
+├── index.html
+├── public
+├── src
+│   ├── assets
+│   │   ├── config.json
+│   │   ├── keyBindings.json
+│   │   └── utils.js
+│   ├── components
+│   │   ├── App.jsx
+│   │   ├── list
+│   │   │   ├── List.jsx
+│   │   │   └── ListItem.jsx
+│   │   ├── sidebar
+│   │   │   ├── Board.jsx
+│   │   │   └── Sidebar.jsx
+│   │   └── workspace
+│   │       ├── Task.jsx
+│   │       └── Workspace.jsx
+│   ├── main.jsx
+│   └── styles.css
+
+<-- Directory/File Tree Ends
+
+File Content Begin -->
+[File Begins] command.txt
+repo2txt --exclude-dir node_modules src/archive --ignore-types .png .cjs .md --ignore-files vite.config.js package-lock.json package.json README.md
+[File Ends] command.txt
+
+[File Begins] index.html
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Varela&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet">
+
+    <script src="https://kit.fontawesome.com/62285e16c6.js" crossorigin="anonymous"></script>
+
+    <title>To Do</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
+
+[File Ends] index.html
+
+    [File Begins] src/assets/config.json
+    {
+        "alwaysShowAdd": false,
+        "priority": [
+            {"id": 0, "color": "white"},
+            {"id": 1, "color": "red"},
+            {"id": 2, "color": "orange"},
+            {"id": 3, "color": "yellow"},
+            {"id": 4, "color": "green"}
+        ]
+    }
+    [File Ends] src/assets/config.json
+
+    [File Begins] src/assets/keyBindings.json
+    {
+        "keyBindings": [
+    		{ "Key": "Enter", "Action": "addItem" },
+    		{ "Key": "d", "META": true, "Action": "deleteItem" },
+    		{ "Key": "ArrowUp", "Action": "stepFocus, -1" },
+    		{ "Key": "ArrowDown", "Action": "stepFocus, 1" },
+    		{ "Key": "ArrowUp", "ALT": true, "Action": "edgeFocus, 0" },
+    		{ "Key": "ArrowDown", "ALT": true, "Action": "edgeFocus, -1" },
+    		{ "Key": "s", "META": true, "Action": "sortItems" },
+    		{ "Key": "0", "META": true, "Action": "setPriority, 0" },
+    		{ "Key": "1", "META": true, "Action": "setPriority, 1" },
+    		{ "Key": "2", "META": true, "Action": "setPriority, 2" },
+    		{ "Key": "3", "META": true, "Action": "setPriority, 3" },
+    		{ "Key": "4", "META": true, "Action": "setPriority, 4" }
+    ]}
+    [File Ends] src/assets/keyBindings.json
+
+    [File Begins] src/assets/utils.js
+    import KeyBindings from "./keyBindings.json";
+    import config from "./config.json";
+    
+    export function generateKeyCombo({ Key, META, SHIFT, ALT, CTRL }) {
+    	let prefix = "";
+    	if (META) prefix += "META_";
+    	if (SHIFT) prefix += "SHIFT_";
+    	if (ALT) prefix += "ALT_";
+    	if (CTRL) prefix += "CTRL_";
+    	return `${prefix}${Key.toLowerCase()}`;
+    }
+    
+    export function getKeyBindingsConfig() {
+    	const keyBindings = KeyBindings.keyBindings;
+    
+    	return keyBindings.reduce((acc, binding) => {
+    		const combo = generateKeyCombo(binding);
+    		acc[combo] = binding;
+    		return acc;
+    	}, {});
+    }
+    
+    export function getPriorityConfig() {
+    	return config.priority.map((element) => [element.id, element.color]);
+    }
+    
+    export function resetId(arrySetter) {
+    	arrySetter((prevItems) =>
+    		prevItems.map((item, idx) => ({ ...item, id: idx }))
+    	);
+    }
+
+    [File Ends] src/assets/utils.js
+
+    [File Begins] src/components/App.jsx
+    import React from "react";
+    import Workspace from "./workspace/Workspace";
+    import Sidebar from "./sidebar/Sidebar";
+    
+    export default function App() {
+    	const [workspace, setWorkspace] = React.useState("");
+    
+    	return (
+    		<div className="app">
+    			<Sidebar setWorkspace={setWorkspace} />
+    			<Workspace name={workspace} />
+    		</div>
+    	);
+    }
+
+    [File Ends] src/components/App.jsx
+
+      [File Begins] src/components/list/List.jsx
+      import React from "react";
+      import {
+      	getKeyBindingsConfig,
+      	generateKeyCombo,
+      	resetId,
+      } from "../../assets/utils";
+      
+      export default function List(props) {
+      	const [items, setItems] = React.useState([]);
+      	const itemRefs = React.useRef([]);
+      	const [focus, setFocus] = React.useState(props.itemElements.length - 1);
+      
+      	const keyBindings = getKeyBindingsConfig();
+      
+      	React.useEffect(() => {
+      		props.setListItems(getTasks());
+      	}, [0, props.name]);
+      
+      	React.useEffect(() => {
+      		storeItems(props.itemElements);
+      		itemRefs.current = [];
+      		setItems(
+      			props.itemElements.map((item, idx) =>
+      				React.cloneElement(item, {
+      					parameters: {
+      						onClick: (event) => handleClick(idx, event),
+      						handleChange: (event) => handleChange(idx, event),
+      						handleKeyDown: (event) => handleKeyDown(idx, event),
+      						addRef: (element) => addItemRef(element),
+      					},
+      				})
+      			)
+      		);
+      	}, [props.itemElements]);
+      
+      	React.useEffect(() => {
+      		itemRefs.current[focus] && itemRefs.current[focus].focus();
+      	}, [items, focus]);
+      
+      	function addItemRef(element) {
+      		if (element && !itemRefs.current.includes(element)) {
+      			itemRefs.current.push(element);
+      		}
+      	}
+      
+      	function storeItems() {
+      		clearItems();
+      		props.items.map((item) =>
+      			localStorage.setItem(
+      				`${props.name}-${item.id}`,
+      				JSON.stringify(item)
+      			)
+      		);
+      	}
+      
+      	function clearItems() {
+      		let id = 0;
+      		let localItem = localStorage.getItem(`${props.name}-${id}`);
+      		while (localItem) {
+      			localStorage.removeItem(`${props.name}-${id}`);
+      			localItem = localStorage.getItem(`${props.name}-${++id}`);
+      		}
+      	}
+      
+      	function getTasks() {
+      		let localItems = [];
+      		let id = 0;
+      		let localItem = localStorage.getItem(`${props.name}-${id}`);
+      		while (localItem) {
+      			localItems.push(JSON.parse(localItem));
+      			localItem = localStorage.getItem(`${props.name}-${++id}`);
+      		}
+      		return localItems;
+      	}
+      
+      	function handleChange(id, event) {
+      		setValue(id, "text", event.target.value);
+      	}
+      
+      	function setValue(id, key, value) {
+      		props.setListItems((prevItems) => [
+      			...prevItems.slice(0, id),
+      			{ ...prevItems[id], [key]: value },
+      			...prevItems.slice(id + 1),
+      		]);
+      	}
+      
+      	function handleClick(id, event) {
+      		setFocus(id);
+      		props.customClickHandler && props.customClickHandler(id, event);
+      	}
+      
+      	function handleKeyDown(id, event) {
+      		const {
+      			key,
+      			metaKey: META,
+      			shiftKey: SHIFT,
+      			altKey: ALT,
+      			ctrlKey: CTRL,
+      		} = event;
+      
+      		const binding =
+      			keyBindings[generateKeyCombo({ Key: key, META, SHIFT, ALT, CTRL })];
+      
+      		if (binding) {
+      			event.preventDefault();
+      
+      			const actionString = binding.Action;
+      			let functionName = actionString;
+      
+      			const parameters = [id];
+      			const comIndex = actionString.indexOf(",");
+      
+      			if (comIndex > 0) {
+      				parameters.push(Number(actionString.slice(comIndex + 1)));
+      				functionName = actionString.slice(0, comIndex);
+      			}
+      
+      			let functionString = `${functionName}(${parameters.map(
+      				(param) => `${param}`
+      			)})`;
+      
+      			try {
+      				eval(functionString);
+      			} catch (error) {
+      				props.customKeyHandler &&
+      					props.customKeyHandler(functionString);
+      			}
+      		}
+      	}
+      
+      	function addItem(id) {
+      		props.setListItems((prevItems) => [
+      			...prevItems.slice(0, id + 1),
+      			{ ...props.emptyItem, id: id },
+      			...prevItems.slice(id + 1),
+      		]);
+      		resetId(props.setListItems);
+      		setFocus(id + 1);
+      	}
+      
+      	function deleteItem(id) {
+      		props.setListItems((prevItems) => [
+      			...prevItems.slice(0, id),
+      			...prevItems.slice(id + 1),
+      		]);
+      		resetId(props.setListItems);
+      
+      		const size = props.itemElements.length - 1;
+      		setFocus((prevFocus) => {
+      			return prevFocus >= size ? size - 1 : prevFocus;
+      		});
+      	}
+      
+      	function stepFocus(idx, step) {
+      		setFocus((prevFocus) => {
+      			const newFocus = prevFocus + step;
+      			return Math.max(
+      				0,
+      				Math.min(newFocus, props.itemElements.length - 1)
+      			);
+      		});
+      	}
+      
+      	function edgeFocus(idx, direction) {
+      		if (direction == -1) {
+      			direction = props.itemElements.length - 1;
+      		}
+      
+      		setFocus(direction);
+      	}
+      
+      	return (
+      		<div className="list">
+      			{props.itemElements.length === 0 && (
+      				<button onClick={() => addItem(-1)}>Insert Task</button>
+      			)}
+      			{items}
+      		</div>
+      	);
+      }
+
+      [File Ends] src/components/list/List.jsx
+
+      [File Begins] src/components/list/ListItem.jsx
+      import React from "react";
+      
+      export default function ListItem(props) {
+      	return (
+      		<div className="list-item">
+      			<input
+      				className={`list-item--input ${props.className}`}
+      				type="text"
+      				onClick={props.parameters.onClick}
+      				onChange={props.parameters.handleChange}
+      				onKeyDown={props.parameters.handleKeyDown}
+      				value={props.value}
+      				ref={props.parameters.addRef}
+      			/>
+      		</div>
+      	);
+      }
+
+      [File Ends] src/components/list/ListItem.jsx
+
+      [File Begins] src/components/sidebar/Board.jsx
+      import React from "react";
+      import ListItem from "../list/ListItem";
+      
+      export default function Board(props) {
+      	function getTaskObj() {
+      		return { id: props.id, text: props.text, selected: props.selected };
+      	}
+      
+      	return (
+      		<div className="board" onClick={props.parameters.handleClick}>
+      			<ListItem parameters={props.parameters} value={props.text} />
+      			<i className="fa-regular fa-square-minus" />
+      		</div>
+      	);
+      }
+
+      [File Ends] src/components/sidebar/Board.jsx
+
+      [File Begins] src/components/sidebar/Sidebar.jsx
+      import React from "react";
+      import List from "../list/List";
+      import Board from "./Board";
+      
+      export default function Sidebar(props) {
+      	const [listItems, setListItems] = React.useState([
+      		{ id: "0", text: "Inbox" },
+      	]);
+      
+      	function getListItemElements() {
+      		return listItems.map((item) => {
+      			return <Board key={item.id} id={item.id} text={item.text} />;
+      		});
+      	}
+      
+      	function customClickHandler(id, event) {
+      		props.setWorkspace(listItems[id].text);
+      	}
+      
+      	return (
+      		<div className="sidebar">
+      			<h1>Dhvan</h1>
+      			<List
+      				name="sidebar"
+      				items={listItems}
+      				itemElements={getListItemElements()}
+      				setListItems={setListItems}
+      				emptyItem={{ id: 0, text: "", priority: 0, selected: false }}
+      				customClickHandler={customClickHandler}
+      				// customKeyHandler={customHandler}
+      			/>
+      			<button
+      				onClick={() => {
+      					localStorage.clear();
+      					location.reload();
+      				}}
+      			>
+      				Clear ALL local storage
+      			</button>
+      		</div>
+      	);
+      }
+
+      [File Ends] src/components/sidebar/Sidebar.jsx
+
+      [File Begins] src/components/workspace/Task.jsx
+      import React from "react";
+      import ListItem from "../list/ListItem";
+      
+      export default function Task(props) {
+      	function getTaskObj() {
+      		return { id: props.id, text: props.text, selected: props.selected };
+      	}
+      
+      	return (
+      		<div className="task" onClick={props.parameters.handleClick}>
+      			<input type="checkbox" />
+      			<ListItem
+      				parameters={props.parameters}
+      				value={props.text}
+      				className="task--input"
+      			/>
+      			<i className="fa-regular fa-square-minus" />
+      		</div>
+      	);
+      }
+
+      [File Ends] src/components/workspace/Task.jsx
+
+      [File Begins] src/components/workspace/Workspace.jsx
+      import React from "react";
+      import Task from "./Task";
+      import List from "../list/List";
+      import { resetId } from "../../assets/utils";
+      
+      export default function Workspace(props) {
+      	const sampleListData = [
+      		{ id: 0, text: "task 1", priority: 0, selected: true },
+      		{ id: 1, text: "task 2", priority: 0, selected: false },
+      		{ id: 2, text: "task 3", priority: 0, selected: false },
+      	];
+      
+      	const [listItems, setListItems] = React.useState([]);
+      
+      	// React.useEffect(() => {
+      	// 	setListItems([]);
+      	// }, [props.name]);
+      
+      	function getListItemElements() {
+      		return listItems.map((item) => {
+      			return (
+      				<Task
+      					key={item.id}
+      					id={item.id}
+      					text={item.text}
+      					selected={item.selected}
+      				/>
+      			);
+      		});
+      	}
+      
+      	function setValue(id, key, value) {
+      		setListItems((prevItems) => [
+      			...prevItems.slice(0, id),
+      			{ ...prevItems[id], [key]: value },
+      			...prevItems.slice(id + 1),
+      		]);
+      	}
+      
+      	function customKeyHandler(functionString) {
+      		eval(functionString);
+      	}
+      
+      	function setPriority(id, priority) {
+      		setValue(id, "priority", priority);
+      	}
+      
+      	function sortItems(id) {
+      		console.log("sorted");
+      		setListItems(
+      			[...listItems].sort(
+      				(a, b) => !a.priority - !b.priority || a.priority - b.priority
+      			)
+      		);
+      
+      		resetId(setListItems);
+      	}
+      
+      	console.log(localStorage);
+      
+      	return (
+      		<div className="workspace">
+      			<h1>{props.name}</h1>
+      			<List
+      				name={props.name}
+      				items={listItems}
+      				itemElements={getListItemElements()}
+      				setListItems={setListItems}
+      				emptyItem={{ id: 0, text: "", priority: 0, selected: false }}
+      				customKeyHandler={customKeyHandler}
+      			/>
+      		</div>
+      	);
+      }
+
+      [File Ends] src/components/workspace/Workspace.jsx
+
+  [File Begins] src/main.jsx
+  import React from "react";
+  import ReactDOM from "react-dom/client";
+  import App from "./components/App";
+  import "./styles.css";
+  
+  ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+
+  [File Ends] src/main.jsx
+
+  [File Begins] src/styles.css
+  /* Variables */
+  
+  :root {
+      --sidebar-width: 20%;
+  
+      --dark-top: #ffff;
+      --dark-1: #121212;
+      --dark-2: #212121;
+  
+      --accent-top: #00bcd4;
+      --accent-1: #161b1c;
+      --accent-2: #2b3031;
+  
+      --font-1: "Varela";
+      --font-2: "Space Grotesk";
+  }
+  
+  /* Global */
+  
+  * {
+      box-sizing: border-box;
+  
+      margin: 0;
+      padding: 0;
+  
+      /* color: var(--dark-top); */
+  
+      font-family: var(--font-1), var(--font-2);
+  }
+  
+  html, head, body, #root {
+      width: 100vw;
+      height: 100vh;
+  }
+  
+  /* App */
+  
+  .app {
+      display: flex;
+  
+      width: 100%;
+      height: 100%;
+      
+      background-color: var(--dark-1);
+  
+      color: var(--dark-top)
+  }
+  
+  .sidebar {
+      width: 20%;
+      padding: 20px;
+  
+      background-color: var(--accent-2);
+  }
+  
+  .workspace {
+      width: 80%;
+  }
+  
+  .task, .board {
+      display: flex;
+  
+      width: 100%;
+  }
+  [File Ends] src/styles.css
+
+
+<-- File Content Ends
+
